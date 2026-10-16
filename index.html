@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مطعم شاورمايشن - فرع حلي | خيارك الصح .. في الوقت الصح</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e8321e;
+      --secondary: #ff8c1a;
+      --accent: #ffd23f;
+      --dark-bg: #1c0907;
+      --card-bg: rgba(48, 16, 9, 0.92);
+      --text-light: #fff6e6;
+      --text-muted: #f0d5bd;
+      --glow-red: 0 0 20px rgba(232, 50, 30, 0.6);
+      --glow-orange: 0 0 20px rgba(255, 140, 26, 0.6);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+      overflow-x: hidden;
+    }
+
+    /* === شاشة الترحيب Splash Screen === */
+    #splashScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, #4a1409 0%, #160504 100%);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #splashScreen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: splashPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .splash-logo-ring {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--secondary);
+      border-bottom-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      animation: spinRing 3s linear infinite;
+      box-shadow: 0 0 25px rgba(255, 140, 26, 0.4);
+    }
+
+    .splash-logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 900;
+      padding: 8px 22px;
+      border-radius: 16px;
+      box-shadow: var(--glow-red);
+      letter-spacing: 0.5px;
+    }
+
+    .splash-slogan {
+      font-size: 1.15rem;
+      color: var(--accent);
+      font-weight: 800;
+      margin-top: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .splash-branch-label {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      font-weight: 700;
+      margin-top: 1rem;
+      background: rgba(255, 140, 26, 0.15);
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 140, 26, 0.4);
+    }
+
+    .splash-loader-bar {
+      width: 140px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .splash-loader-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      animation: fillProgress 3s linear forwards;
+    }
+
+    @keyframes fillProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    @keyframes spinRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes splashPop {
+      0% { opacity: 0; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--dark-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 0.9rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(28, 9, 7, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 1000;
+      border-bottom: 2px solid rgba(232, 50, 30, 0.35);
+    }
+
+    .brand-box { display: flex; align-items: center; gap: 12px; }
+    .logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-weight: 900;
+      padding: 5px 14px;
+      border-radius: 10px;
+      font-size: 1.35rem;
+      box-shadow: var(--glow-red);
+    }
+    .slogan-nav { font-size: 0.85rem; color: var(--accent); font-weight: 700; }
+
+    .nav-links { display: flex; gap: 1.1rem; list-style: none; }
+    .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 700; font-size: 0.88rem; transition: all 0.3s ease; }
+    .nav-links a:hover { color: var(--secondary); text-shadow: 0 0 10px rgba(255, 140, 26, 0.8); }
+
+    .video-hero-wrapper {
+      min-height: 85vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6.5rem 1.5rem 3.5rem;
+    }
+
+    .video-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: 1;
+      filter: brightness(0.65) contrast(1.1);
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(28, 9, 7, 0.72) 0%, rgba(28, 9, 7, 0.94) 100%);
+      z-index: 2;
+    }
+
+    .hero-content { position: relative; z-index: 3; max-width: 900px; width: 100%; }
+    .tagline { display: inline-block; padding: 0.4rem 1.4rem; border: 1px solid var(--secondary); border-radius: 50px; color: var(--accent); font-weight: 800; font-size: 0.95rem; margin-bottom: 1rem; box-shadow: var(--glow-orange); }
+    .hero-content h1 { font-size: 3.2rem; font-weight: 900; margin-bottom: 0.8rem; line-height: 1.3; }
+    .hero-content h1 span { color: var(--secondary); text-shadow: var(--glow-orange); }
+    .hero-content p.hero-sub { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 1.8rem; font-weight: 600; }
+
+    .offers-interactive-wrapper { margin: 1.5rem auto 2.2rem; max-width: 750px; position: relative; }
+    .offer-slide-box { 
+      background: linear-gradient(135deg, rgba(232, 50, 30, 0.35), rgba(255, 140, 26, 0.3)); 
+      border: 2px dashed var(--accent); 
+      border-radius: 20px; 
+      padding: 1.6rem 2rem; 
+      box-shadow: 0 0 30px rgba(255, 140, 26, 0.5); 
+      text-align: center; 
+      position: relative; 
+      backdrop-filter: blur(10px); 
+    }
+    .offer-badge { display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-weight: 900; font-size: 0.85rem; padding: 4px 16px; border-radius: 30px; margin-bottom: 0.6rem; box-shadow: var(--glow-red); }
+    .offer-title { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 0.4rem; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+    .offer-desc { color: var(--accent); font-size: 1.25rem; font-weight: 800; margin: 0; }
+
+    .btn-glow { display: inline-block; padding: 0.85rem 2.4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; text-decoration: none; font-weight: 800; border-radius: 40px; box-shadow: 0 0 20px rgba(232, 50, 30, 0.7), 0 0 40px rgba(255, 140, 26, 0.4); transition: all 0.3s ease; border: none; cursor: pointer; }
+    .btn-glow:hover { transform: translateY(-3px) scale(1.03); }
+
+    .menu-section { padding: 4.5rem 1.2rem; position: relative; }
+    .section-container { position: relative; z-index: 2; max-width: 1350px; margin: auto; }
+    .section-header { text-align: center; margin-bottom: 2.2rem; }
+    .section-header h2 { font-size: 2.3rem; color: var(--secondary); font-weight: 900; text-shadow: var(--glow-orange); margin-bottom: 0.4rem; }
+    .section-header p { color: var(--accent); font-size: 1.05rem; font-weight: 700; }
+
+    .section-slider-wrapper { position: relative; display: flex; align-items: center; padding: 0 10px; }
+    .slider-track { display: flex; overflow-x: auto; gap: 1.2rem; padding: 1rem 0.5rem 1.8rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; width: 100%; }
+    .slider-track::-webkit-scrollbar { height: 6px; }
+    .slider-track::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 6px; }
+
+    .slider-track .card { flex: 0 0 calc((100% - 3.6rem) / 4); min-width: 220px; scroll-snap-align: start; }
+
+    .card { background: var(--card-bg); border: 1px solid rgba(255, 140, 26, 0.25); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; display: flex; flex-direction: column; }
+    .card:hover { transform: translateY(-6px); border-color: var(--secondary); box-shadow: 0 12px 30px rgba(255, 140, 26, 0.35); }
+    .card-img-wrapper { width: 100%; height: 210px; overflow: hidden; background: #3a140b; }
+    .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .card:hover .card-img-wrapper img { transform: scale(1.08); }
+    .card-content { padding: 1.1rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+    .item-title { font-size: 1.12rem; font-weight: 800; color: #fff; line-height: 1.4; }
+    .prices-badge-group { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; min-width: max-content; }
+    .price-tag { font-size: 1.05rem; color: var(--accent); font-weight: 900; text-shadow: 0 0 10px rgba(255, 210, 63, 0.5); }
+    .price-sub { font-size: 0.82rem; color: #ff9e00; font-weight: 700; }
+    .item-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem; }
+    .card-footer { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; align-items: center; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 0.7rem; }
+    
+    .btn-add { background: rgba(232, 50, 30, 0.2); color: #fff; border: 1px solid var(--primary); padding: 0.35rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: all 0.3s; }
+    .btn-add:hover { background: var(--primary); box-shadow: var(--glow-red); }
+
+    .slider-arrow-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: 2px solid var(--accent); width: 46px; height: 46px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; font-weight: 900; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), var(--glow-orange); transition: all 0.3s ease; }
+    .slider-arrow-btn:hover { transform: translateY(-50%) scale(1.15); background: var(--secondary); }
+    .arrow-left { left: -14px; }
+    .arrow-right { right: -14px; }
+
+    /* إشعار الهدية */
+    .toast-center-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: rgba(26, 12, 9, 0.96);
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 210, 63, 0.6);
+      border-radius: 24px;
+      padding: 2.2rem 2.5rem;
+      z-index: 3000;
+      text-align: center;
+      max-width: 440px;
+      width: 90%;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .toast-center-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .toast-icon { font-size: 4rem; margin-bottom: 0.6rem; animation: giftBounce 1.2s infinite alternate; }
+    .toast-title { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 0.6rem; }
+    .toast-body { font-size: 1.15rem; font-weight: 800; color: var(--accent); line-height: 1.6; margin-bottom: 1.5rem; }
+
+    @keyframes giftBounce {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-10px) scale(1.12); }
+    }
+
+    .footer-bar { background: #150504; border-top: 2px solid var(--primary); padding: 3rem 1.5rem 6rem; text-align: center; }
+    .info-card { max-width: 750px; margin: auto; background: rgba(48, 16, 9, 0.95); border: 1px solid rgba(255, 140, 26, 0.3); padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+    .phone-number { font-size: 2.2rem; font-weight: 900; color: var(--accent); text-shadow: var(--glow-orange); direction: ltr; display: inline-block; margin: 1rem 0; text-decoration: none; }
+    
+    .cart-float { position: fixed; bottom: 25px; left: 25px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; padding: 0.9rem 1.8rem; border-radius: 50px; box-shadow: 0 0 25px rgba(255, 140, 26, 0.7); font-weight: 800; cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease; }
+    .cart-float:hover { transform: scale(1.05); }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-box { background: #2e0f08; color: var(--text-light); width: 100%; max-width: 530px; border-radius: 18px; padding: 1.6rem; border: 1px solid rgba(255, 140, 26, 0.4); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), var(--glow-red); animation: modalSlide 0.3s ease; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 140, 26, 0.25); padding-bottom: 0.8rem; margin-bottom: 1rem; }
+    .modal-header h3 { font-size: 1.3rem; font-weight: 800; color: var(--secondary); }
+    .close-btn { font-size: 1.8rem; cursor: pointer; color: var(--accent); line-height: 1; }
+    
+    .input-field, .notes-textarea, select { width: 100%; background: #240b07; color: #fff; border: 1px solid rgba(255, 140, 26, 0.3); border-radius: 8px; padding: 0.7rem; font-family: inherit; font-size: 0.95rem; margin-top: 0.4rem; outline: none; }
+    .select-wrapper { position: relative; display: block; }
+    .select-wrapper select { appearance: none; -webkit-appearance: none; -moz-appearance: none; cursor: pointer; padding-left: 2rem; }
+    .select-wrapper::after { content: '▼'; font-size: 0.8rem; color: var(--accent); position: absolute; left: 1rem; top: 55%; transform: translateY(-50%); pointer-events: none; }
+    .input-field:focus, .notes-textarea:focus, select:focus { border-color: var(--secondary); box-shadow: var(--glow-orange); }
+
+    .option-group-title { font-weight: 800; font-size: 0.92rem; color: var(--accent); margin: 0.8rem 0 0.4rem; border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 0.2rem; }
+    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-bottom: 0.6rem; }
+    .option-item { display: flex; align-items: center; gap: 6px; background: rgba(66, 24, 12, 0.85); border: 1px solid rgba(255, 140, 26, 0.2); padding: 0.45rem 0.6rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--text-light); transition: all 0.2s; }
+    .option-item:hover { background: rgba(232, 50, 30, 0.25); border-color: var(--secondary); }
+    .option-item input { accent-color: var(--primary); cursor: pointer; }
+
+    /* تفضيلات وملاحظات الطلب All Notes */
+    .notes-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0.4rem 0 0.8rem;
+    }
+    .note-chip {
+      background: rgba(45, 26, 22, 0.9);
+      border: 1px solid rgba(255, 140, 26, 0.3);
+      color: var(--text-light);
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .note-chip input { display: none; }
+    .note-chip:hover {
+      border-color: var(--secondary);
+      background: rgba(232, 50, 30, 0.3);
+    }
+    .note-chip.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 140, 26, 0.4);
+    }
+
+    .qty-counter-box { background: rgba(66, 24, 12, 0.95); border: 1.5px solid var(--secondary); border-radius: 12px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; margin: 1rem 0 0.6rem; }
+    .qty-controls { display: flex; align-items: center; gap: 12px; }
+    .btn-qty-step { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: 1.3rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; line-height: 1; }
+    .qty-number { font-size: 1.35rem; font-weight: 900; color: var(--accent); min-width: 25px; text-align: center; }
+    .qty-subtotal-price { font-size: 1.1rem; font-weight: 900; color: var(--accent); }
+
+    .btn-modal-action { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; padding: 0.85rem; border-radius: 30px; font-weight: 800; font-size: 1.1rem; cursor: pointer; margin-top: 1.2rem; }
+    .cart-item-preview { background: rgba(28, 9, 7, 0.95); border: 1px solid rgba(255, 140, 26, 0.3); border-radius: 10px; padding: 0.8rem; margin-bottom: 0.7rem; }
+
+    @keyframes modalSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1100px) {
+      .slider-track .card { flex: 0 0 calc((100% - 2.4rem) / 3); }
+    }
+    @media (max-width: 820px) {
+      .slider-track .card { flex: 0 0 calc((100% - 1.2rem) / 2); }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0.8rem 1rem; }
+      .nav-links { display: none; }
+      .hero-content h1 { font-size: 2.1rem; }
+      .phone-number { font-size: 1.7rem; }
+      .cart-float { bottom: 15px; left: 15px; padding: 0.75rem 1.2rem; font-size: 0.88rem; }
+      .options-grid { grid-template-columns: 1fr 1fr; }
+      .slider-arrow-btn { display: none; }
+      .section-slider-wrapper { padding: 0; }
+      .slider-track .card { flex: 0 0 84%; }
+      .splash-logo-badge { font-size: 1.7rem; padding: 8px 18px; }
+      .splash-slogan { font-size: 1.05rem; }
+    }
+  
+/* ===== طبقة التحسينات: ألوان شهية + حركة ===== */
+body{background:#1c0907;background-image:radial-gradient(circle at 15% 10%,rgba(232,50,30,.22),transparent 45%),radial-gradient(circle at 85% 40%,rgba(255,140,26,.16),transparent 45%),radial-gradient(circle at 30% 90%,rgba(255,210,63,.10),transparent 45%);background-attachment:fixed}
+#scrollBar{position:fixed;top:0;right:0;height:4px;width:0;background:linear-gradient(90deg,#ffd23f,#ff8c1a,#e8321e);z-index:5000;box-shadow:0 0 12px #ff8c1a}
+.menu-section:nth-of-type(odd){background:linear-gradient(180deg,rgba(60,18,9,.92),rgba(28,9,7,.96)) !important}
+.menu-section:nth-of-type(even){background:linear-gradient(180deg,rgba(80,22,10,.88),rgba(36,11,7,.96)) !important}
+.menu-section::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#ff8c1a,#ffd23f,#ff8c1a,transparent);opacity:.7}
+nav{transition:padding .3s,background .3s}nav.scrolled{padding:.5rem 2rem;background:rgba(28,9,7,.96)}
+.logo-badge,.splash-logo-badge{background:linear-gradient(135deg,#e8321e,#ff8c1a,#ffd23f);background-size:200% 200%;animation:gradMove 4s ease infinite;color:#2a0a05;text-shadow:0 1px 0 rgba(255,255,255,.3)}
+@keyframes gradMove{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+.hero-content h1 span{background:linear-gradient(90deg,#ffd23f,#ff8c1a,#e8321e,#ffd23f);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fire 3.5s linear infinite;text-shadow:none;filter:drop-shadow(0 0 14px rgba(255,140,26,.55))}
+@keyframes fire{to{background-position:300% 0}}
+.hero-content h1{animation:heroIn 1s .2s both cubic-bezier(.2,.9,.3,1.2)}
+.tagline{animation:heroIn .8s both,pulseRing 2.2s 1s infinite}
+.hero-sub{animation:heroIn 1s .4s both}.offers-interactive-wrapper{animation:heroIn 1s .6s both}
+@keyframes heroIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(255,140,26,.6)}100%{box-shadow:0 0 0 18px rgba(255,140,26,0)}}
+.offer-slide-box{animation:floaty 4s ease-in-out infinite;overflow:hidden}
+.offer-slide-box::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.25),transparent);transform:skewX(-20deg);animation:sweep 3.5s infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes sweep{0%{left:-60%}60%,100%{left:130%}}
+.btn-glow,.btn-modal-action{position:relative;overflow:hidden;background:linear-gradient(135deg,#e8321e,#ff8c1a);color:#fff}
+.btn-glow::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sweep 2.8s infinite}
+.btn-glow{animation:btnPulse 2s infinite}
+@keyframes btnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.section-header h2{display:inline-block;position:relative;color:#ffd23f}
+.section-header h2::after{content:"";display:block;height:4px;width:0;margin:8px auto 0;border-radius:4px;background:linear-gradient(90deg,#e8321e,#ffd23f);transition:width 1s .3s}
+.section-header.in h2::after{width:100%}
+.section-header{opacity:0;transform:translateY(25px);transition:all .8s}.section-header.in{opacity:1;transform:none}
+.card{opacity:0;transform:translateY(40px) scale(.94);transition:opacity .7s,transform .7s cubic-bezier(.2,.9,.3,1.1),box-shadow .3s,border-color .3s;position:relative;will-change:transform}
+.card.in{opacity:1;transform:translateY(0) scale(1)}
+.card.in:hover{transform:translateY(-8px) scale(1.02) perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.card::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:16px;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,210,63,.22),transparent 55%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card:hover{border-color:#ffd23f;box-shadow:0 14px 35px rgba(255,140,26,.45)}
+.card-img-wrapper{position:relative}
+.card-img-wrapper::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(transparent,rgba(48,16,9,.9));pointer-events:none}
+.price-tag{display:inline-block;background:linear-gradient(135deg,#e8321e,#ff8c1a);color:#fff;padding:2px 10px;border-radius:20px;text-shadow:none;box-shadow:0 0 12px rgba(255,140,26,.5);transition:transform .3s}
+.card:hover .price-tag{transform:scale(1.12) rotate(-3deg)}
+.btn-add{position:relative;overflow:hidden;background:rgba(255,140,26,.18);border-color:#ff8c1a}
+.btn-add:hover{background:linear-gradient(135deg,#e8321e,#ff8c1a);transform:scale(1.08)}
+.btn-add:active{transform:scale(.92)}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rip .6s linear;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+.cart-float.bump{animation:bump .6s}
+@keyframes bump{0%,100%{transform:scale(1)}30%{transform:scale(1.25) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
+.cart-float{background:linear-gradient(135deg,#e8321e,#ff8c1a);animation:cartGlow 2.4s infinite}
+@keyframes cartGlow{0%,100%{box-shadow:0 0 18px rgba(255,140,26,.6)}50%{box-shadow:0 0 34px rgba(232,50,30,.9)}}
+#foodRain{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.fl{position:absolute;bottom:-60px;opacity:0;animation:rise linear infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.85}90%{opacity:.7}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+#heroGlow{position:absolute;z-index:2;width:420px;height:420px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,140,26,.28),transparent 65%);transform:translate(-50%,-50%);left:50%;top:50%;transition:left .25s,top .25s}
+.burst{position:fixed;z-index:6000;pointer-events:none;font-size:1.4rem;animation:burst .9s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) scale(.4) rotate(200deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.card,.section-header{opacity:1 !important;transform:none !important}}
+
+  </style>
+<style>
+#menuBtn{background:linear-gradient(135deg,#e8321e,#ff8c1a);border:0;color:#fff;font-size:1.3rem;width:44px;height:44px;border-radius:12px;cursor:pointer;box-shadow:0 0 16px rgba(255,140,26,.6);margin-right:10px;animation:btnPulse 2.4s infinite}
+#sideOv{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:4000;opacity:0;visibility:hidden;transition:.3s}
+#sideOv.open{opacity:1;visibility:visible}
+#sideDrawer{position:fixed;top:0;right:0;height:100%;width:min(380px,92vw);background:linear-gradient(180deg,#3a120a,#1c0907);border-left:2px solid #ff8c1a;z-index:4001;transform:translateX(105%);transition:transform .4s cubic-bezier(.2,.9,.3,1.05);padding:1.2rem;overflow-y:auto;box-shadow:-10px 0 40px rgba(0,0,0,.7)}
+#sideDrawer.open{transform:none}
+.sd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
+.sd-head h3{color:#ffd23f;font-weight:900;font-size:1.3rem}
+.sd-x{background:none;border:0;color:#ffd23f;font-size:2rem;cursor:pointer;line-height:1}
+.sd-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:right;background:rgba(255,140,26,.12);border:1.5px solid rgba(255,140,26,.5);color:#fff;border-radius:16px;padding:1rem;margin-bottom:.8rem;cursor:pointer;font-weight:800;font-size:1.05rem;transition:.25s}
+.sd-opt:hover{background:linear-gradient(135deg,#e8321e,#ff8c1a);transform:translateX(-5px)}
+.sd-opt .ic{font-size:2rem}.sd-opt small{display:block;font-weight:600;color:#f0d5bd;font-size:.8rem}
+.sd-panel{display:none;animation:modalSlide .3s}.sd-panel.show{display:block}
+.sd-back{background:none;border:0;color:#ff8c1a;font-weight:800;cursor:pointer;margin-bottom:.8rem;font-size:.95rem}
+.sd-panel input{width:100%;background:#240b07;color:#fff;border:1px solid rgba(255,140,26,.4);border-radius:10px;padding:.75rem;margin:.4rem 0 .8rem;font-size:1rem;outline:none}
+.sd-panel input:focus{border-color:#ffd23f}
+.sd-panel p.note{color:#f0d5bd;font-size:.9rem;line-height:1.7;margin-bottom:.6rem}
+#gCv{width:100%;max-width:320px;display:block;margin:0 auto;border-radius:16px;border:2px solid #ff8c1a;touch-action:none;background:#2a0d08;box-shadow:0 0 25px rgba(255,140,26,.35)}
+.g-hud{display:flex;justify-content:space-between;font-weight:800;color:#ffd23f;max-width:320px;margin:0 auto .5rem}
+</style>
+</head>
+<body>
+  <div id="scrollBar"></div>
+
+  <!-- شاشة البداية Splash Screen -->
+  <div id="splashScreen">
+    <div class="splash-content">
+      <div class="splash-logo-ring">
+        <span style="font-size: 2.4rem;">🌯</span>
+      </div>
+      <div class="splash-logo-badge">شاورمايشن</div>
+      <div class="splash-slogan">طعم .. مذاق .. لذاذه ✨</div>
+      <div class="splash-branch-label">📍 فرع حلي (المثلث أمام مستوصف العلوي الطبي)</div>
+      
+      <div class="splash-loader-bar">
+        <div class="splash-loader-progress"></div>
+      </div>
+      <span style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">جاري فتح القائمة...</span>
+    </div>
+  </div>
+
+  <!-- التنبيه المنبثق لعرض الأسرة -->
+  <div id="offerToastAlert" class="toast-center-overlay">
+    <div class="toast-icon">🎁</div>
+    <div class="toast-title">🎉 مبروك! حصلت على الرابع مجاناً</div>
+    <div class="toast-body">
+      بما أن مجموع طلباتك من هذا الصنف وصل إلى 3، تمت إضافة <strong>الوجبة الرابعة كهدية مجانية</strong> لك في السلة! 🥪✨
+    </div>
+    <button class="btn-glow" style="padding: 0.6rem 2.2rem; font-size: 1rem;" onclick="closeOfferToast()">حسناً، استمرار ✨</button>
+  </div>
+
+  <nav>
+    <div class="brand-box">
+      <div class="logo-badge">شاورمايشن</div>
+      <span class="slogan-nav" id="navBranchIndicator">فرع حلي</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#plates">الصحون</a></li>
+      <li><a href="#sandwiches">السندوتشات</a></li>
+      <li><a href="#burgers">البرجر</a></li>
+      <li><a href="#tortilla">تورتيلا وبطاطس</a></li>
+      <li><a href="#meals">الوجبات</a></li>
+      <li><a href="#addons">الإضافات</a></li>
+      <li><a href="#drinks">المشروبات</a></li>
+      <li><a href="#contact">الطلب</a></li>
+    </ul>
+  </nav>
+
+  <!-- المشهد الرئيسي -->
+  <section class="video-hero-wrapper">
+    <video class="video-bg" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1920&q=80">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-chef-preparing-a-shawarma-plate-42299-large.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div id="heroGlow"></div><div id="foodRain"></div>
+
+    <div class="hero-content">
+      <span class="tagline" id="heroTagline">خيارك الصح .. في الوقت الصح ✨</span>
+      <h1>مطعم <span>شاورمايشن</span></h1>
+      <p class="hero-sub" id="heroSubText">قائمة فرع حلي الكاملة لأشهى صحون وسندوتشات الشاورما، البرجر، التورتيلا والوجبات</p>
+
+      <div class="offers-interactive-wrapper">
+        <div class="offer-slide-box">
+          <span class="offer-badge">🔥 عرض الأسرة الدائم</span>
+          <h3 class="offer-title">اطلب 3 من أي صنف وسوف تحصل على الرابع مجاناً! 🎁</h3>
+          <p class="offer-desc">اطلب 3 حبات من أي صنف وسنضيف الرابع لك مجاناً تلقائياً في السلة</p>
+        </div>
+      </div>
+
+      <a href="#plates" class="btn-glow">استعرض المنيو واطلب الآن 🔥</a>
+    </div>
+  </section>
+
+  <!-- القسم 1: صحون شاورمايشن -->
+  <section class="menu-section" id="plates" style="background: rgba(16,10,8,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>صحون شاورمايشن</h2>
+        <p>أطباق ممتعة تقدم مع البطاطس والمخلل والصلصات</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('platesTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="platesTrack">
+          <!-- صحن عربي كبير -->
+          <div class="card" data-item-id="صحن عربي كبير">
+            <div class="card-img-wrapper"><img src="img/صحن عربي.jpeg" alt="صحن عربي كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن عربي كبير</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">18 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 20 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">شاورما مقطعة مع بطاطس ومخلل وثومية وصوصات متنوعة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('صحن عربي كبير', 'base')">+ بدون جبن (18)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('صحن عربي كبير', 'cheese')">+ جبنة (20)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- صحن عربي وسط -->
+          <div class="card" data-item-id="صحن عربي وسط">
+            <div class="card-img-wrapper"><img src="img/صحن عربي وسط.jpeg" alt="صحن عربي وسط"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن عربي وسط</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">16 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 18 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">كمية وسط مثالية من الشاورما المقطعة مع خبز الصاج والمقبلات.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('صحن عربي وسط', 'base')">+ بدون جبن (16)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('صحن عربي وسط', 'cheese')">+ جبنة (18)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- صحن عربي صغير -->
+          <div class="card" data-item-id="صحن عربي صغير">
+            <div class="card-img-wrapper"><img src="img/صحن عربي صغير.jpeg" alt="صحن عربي صغير" onerror="this.onerror=null; this.src='img/صحن شوارما صغير.jpeg';"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن عربي صغير</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">13 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 15 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">صحن شاورما فردي سريع وغني بالنكهات والصلصة الخاصة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('صحن عربي صغير', 'base')">+ بدون جبن (13)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('صحن عربي صغير', 'cheese')">+ جبنة (15)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- باشكا إيطالي -->
+          <div class="card" data-item-id="باشكا إيطالي">
+            <div class="card-img-wrapper"><img src="img/باشكا إيطالي.jpeg" alt="باشكا إيطالي" onerror="this.onerror=null; this.src='img/باشكا ايطالي.jpeg';"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">باشكا إيطالي</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">18 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 20 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">شاورما محضرة على الطريقة الإيطالية مع الصوصات والخلطة المخبوزة الذائبة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('باشكا إيطالي', 'base')">+ بدون جبن (18)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('باشكا إيطالي', 'cheese')">+ جبنة (20)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- كلوب زنجر -->
+          <div class="card" data-item-id="كلوب زنجر">
+            <div class="card-img-wrapper"><img src="img/كلووووب.jpeg" alt="كلوب زنجر"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">كلوب زنجر</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">18 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 20 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">طبقات خبز توست مقرمش محشو بصدور الدجاج الزنجر والصلصة الخاصة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('كلوب زنجر', 'base')">+ بدون جبن (18)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('كلوب زنجر', 'cheese')">+ جبنة (20)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- كلوب شاورما -->
+          <div class="card" data-item-id="كلوب شاورما">
+            <div class="card-img-wrapper"><img src="img/كلوب شاورما.jpeg" alt="كلوب شاورما"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">كلوب شاورما</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">18 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 20 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">كلوب ساندوتش محمص ومحشو بشرائح الشاورما والمايونيز والجبنة الشهية.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('كلوب شاورما', 'base')">+ بدون جبن (18)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('كلوب شاورما', 'cheese')">+ جبنة (20)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('platesTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 2: سندوتشات شاورمايشن -->
+  <section class="menu-section" id="sandwiches" style="background: rgba(20,13,11,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>سندوتشات شاورمايشن</h2>
+        <p>خبز صاج وتوست بألذ لفات الشاورما الطازجة</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('sandwichesTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="sandwichesTrack">
+          <!-- شاورما صاروخ -->
+          <div class="card" data-item-id="شاورما صاروخ">
+            <div class="card-img-wrapper"><img src="img/شاوارما صاروخ.jpeg" alt="شاورما صاروخ"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">شاورما صاروخ</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">8 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 9 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">ساندوتش صاروخ كبير ملفوف بعناية ومحمص ومتبل بالثومية اللذيذة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('شاورما صاروخ', 'base')">+ بدون جبن (8)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('شاورما صاروخ', 'cheese')">+ جبنة (9)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- شاورما وسط -->
+          <div class="card" data-item-id="شاورما وسط">
+            <div class="card-img-wrapper"><img src="img/شاوارما وسط.jpeg" alt="شاورما وسط"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">شاورما وسط</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">5 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 6 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">لفة شاورما كلاسيكية بالحجم المناسب والخفيف لنكهة متوازنة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('شاورما وسط', 'base')">+ بدون جبن (5)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('شاورما وسط', 'cheese')">+ جبنة (6)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ساندوتش شاورمايشن -->
+          <div class="card" data-item-id="ساندوتش شاورمايشن">
+            <div class="card-img-wrapper"><img src="img/سانودتش شاورمايشن.jpeg" alt="ساندوتش شاورمايشن"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">ساندوتش شاورمايشن</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">10 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 11 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">الساندوتش الخاص بالمطعم بخلطة شاورمايشن الحصرية المميزة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('ساندوتش شاورمايشن', 'base')">+ بدون جبن (10)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('ساندوتش شاورمايشن', 'cheese')">+ جبنة (11)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- شاورما جامبو -->
+          <div class="card" data-item-id="شاورما جامبو">
+            <div class="card-img-wrapper"><img src="img/شاوارما جامبو.jpeg" alt="شاورما جامبو"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">شاورما جامبو</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">9 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 10 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">حجم جامبو مشبع مليء بقطع الدجاج المتبلة وخلطة الصوص الغنية.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('شاورما جامبو', 'base')">+ بدون جبن (9)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('شاورما جامبو', 'cheese')">+ جبنة (10)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- توست شاورما -->
+          <div class="card" data-item-id="توست شاورما">
+            <div class="card-img-wrapper"><img src="img/توست شاورمااا.jpeg" alt="توست شاورما"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">توست شاورما</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">8 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 9 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">شاورما داخل شرائح توست محمص وذهبي مقرمش ولذيذ.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('توست شاورما', 'base')">+ بدون جبن (8)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('توست شاورما', 'cheese')">+ جبنة (9)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- برجر شاورما -->
+          <div class="card" data-item-id="برجر شاورما">
+            <div class="card-img-wrapper"><img src="img/برجر شاورما.jpeg" alt="برجر شاورما"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">برجر شاورما</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">8 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 9 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">خبز برجر طازج محشو بشاورما الدجاج والصوص والمايونيز.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('برجر شاورما', 'base')">+ بدون جبن (8)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('برجر شاورما', 'cheese')">+ جبنة (9)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('sandwichesTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 3: قسم البرجر -->
+  <section class="menu-section" id="burgers" style="background: rgba(16,10,8,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>قسم البرجر</h2>
+        <p>خيارات مشوية ومقلية بنكهات لا تقاوم بخبز البرجر المعتمد</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('burgersTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="burgersTrack">
+          <!-- برجر دجاج -->
+          <div class="card" data-item-id="برجر دجاج">
+            <div class="card-img-wrapper"><img src="img/برجر لحم.jpeg" alt="برجر دجاج"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">برجر دجاج</span>
+                <span class="price-tag">9 ر.ي</span>
+              </div>
+              <p class="item-desc">قطعة دجاج طازجة (مشوي أو مقلي) مع الخس والصلصة المميزة.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('برجر دجاج', 9, 'مشوي 🔥')">+ مشوي 🔥 (9)</button>
+                <button class="btn-add" onclick="openItemWithPrep('برجر دجاج', 9, 'مقلي 🍗')">+ مقلي 🍗 (9)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- برجر دبل دجاج -->
+          <div class="card" data-item-id="برجر دبل دجاج">
+            <div class="card-img-wrapper"><img src="img/برجر دبل دجاج.jpeg" alt="برجر دبل دجاج"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">برجر دبل دجاج</span>
+                <span class="price-tag">14 ر.ي</span>
+              </div>
+              <p class="item-desc">شريحتين دجاج مشوي أو مقلي بالحجم المضاعف والمشبع.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('برجر دبل دجاج', 14, 'مشوي 🔥')">+ مشوي 🔥 (14)</button>
+                <button class="btn-add" onclick="openItemWithPrep('برجر دبل دجاج', 14, 'مقلي 🍗')">+ مقلي 🍗 (14)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- برجر زنجر -->
+          <div class="card" data-item-id="برجر زنجر">
+            <div class="card-img-wrapper"><img src="img/برجر زنجر.jpeg" alt="برجر زنجر"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">برجر زنجر</span>
+                <span class="price-tag">9 ر.ي</span>
+              </div>
+              <p class="item-desc">دجاج زنجر مقرمش حار مع صوص المايونيز والصلصة اللذيذة.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('برجر زنجر', 9, 'مقلي 🍗')">+ إضافة للطلب (9 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- برجر زنجر دبل -->
+          <div class="card" data-item-id="برجر زنجر دبل">
+            <div class="card-img-wrapper"><img src="img/زنجر دبل.jpeg" alt="برجر زنجر دبل"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">برجر زنجر دبل</span>
+                <span class="price-tag">14 ر.ي</span>
+              </div>
+              <p class="item-desc">شريحتين من الزنجر المقرمش الحار بالحجم المضاعف والمشبع.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('برجر زنجر دبل', 14, 'مقلي 🍗')">+ إضافة للطلب (14 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- جانبو دجاج برجر -->
+          <div class="card" data-item-id="جانبو دجاج برجر">
+            <div class="card-img-wrapper"><img src="img/جامبو دجاج برجر.jpeg" alt="جانبو دجاج برجر"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">جانبو دجاج برجر</span>
+                <span class="price-tag">10 ر.ي</span>
+              </div>
+              <p class="item-desc">قطعة دجاج جامبو كبيرة وغنية بالنكهات والصلصة الخاصة.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('جانبو دجاج برجر', 10, 'مشوي 🔥')">+ مشوي 🔥 (10)</button>
+                <button class="btn-add" onclick="openItemWithPrep('جانبو دجاج برجر', 10, 'مقلي 🍗')">+ مقلي 🍗 (10)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- جانبو زنجر -->
+          <div class="card" data-item-id="جانبو زنجر">
+            <div class="card-img-wrapper"><img src="img/جامبو زنجر.jpeg" alt="جانبو زنجر"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">جانبو زنجر</span>
+                <span class="price-tag">10 ر.ي</span>
+              </div>
+              <p class="item-desc">قطعة زنجر كبيرة مقرمشة ومتبلة داخل خبز برجر فاخر.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('جانبو زنجر', 10, 'مقلي 🍗')">+ إضافة للطلب (10 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- توست دجاج برجر -->
+          <div class="card" data-item-id="توست دجاج برجر">
+            <div class="card-img-wrapper"><img src="img/توست دجاج زنجر.jpeg" alt="توست دجاج برجر"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">توست دجاج برجر</span>
+                <span class="price-tag">8 ر.ي</span>
+              </div>
+              <p class="item-desc">دجاج برجر مشوي أو مقلي محمص بشرائح التوست الذهبي الشهي.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('توست دجاج برجر', 8, 'مشوي 🔥')">+ مشوي 🔥 (8)</button>
+                <button class="btn-add" onclick="openItemWithPrep('توست دجاج برجر', 8, 'مقلي 🍗')">+ مقلي 🍗 (8)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('burgersTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 4: تورتيلا وبطاطس شاورمايشن -->
+  <section class="menu-section" id="tortilla" style="background: rgba(22,14,12,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>تورتيلا وبطاطس شاورمايشن</h2>
+        <p>سندوتشات التورتيلا الفاخرة، المسحب المقرمش، وأطباق البطاطس الذهبية</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('tortillaTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="tortillaTrack">
+          <!-- تورتيلا دجاج برجر صغير -->
+          <div class="card" data-item-id="تورتيلا دجاج برجر صغير">
+            <div class="card-img-wrapper"><img src="img/تورتلا دجاج صغير (1).jpeg" alt="تورتيلا دجاج برجر صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تورتيلا دجاج برجر صغير</span>
+                <span class="price-tag">7 ر.ي</span>
+              </div>
+              <p class="item-desc">دجاج برجر طازج ملفوف بخبز التورتيلا الرائع مع الصوص الخاص.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا دجاج برجر صغير', 7, 'مشوي 🔥')">+ مشوي 🔥 (7)</button>
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا دجاج برجر صغير', 7, 'مقلي 🍗')">+ مقلي 🍗 (7)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- تورتيلا دجاج برجر كبير -->
+          <div class="card" data-item-id="تورتيلا دجاج برجر كبير">
+            <div class="card-img-wrapper"><img src="img/تورتلا دجاج كبير(2).jpeg" alt="تورتيلا دجاج برجر كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تورتيلا دجاج برجر كبير</span>
+                <span class="price-tag">11 ر.ي</span>
+              </div>
+              <p class="item-desc">حجم كبير مشبع من برجر الدجاج داخل خبز التورتيلا المحمص.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا دجاج برجر كبير', 11, 'مشوي 🔥')">+ مشوي 🔥 (11)</button>
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا دجاج برجر كبير', 11, 'مقلي 🍗')">+ مقلي 🍗 (11)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- تورتيلا زنجر كبير -->
+          <div class="card" data-item-id="تورتيلا زنجر كبير">
+            <div class="card-img-wrapper"><img src="img/تورتلا زنجر كبير.jpeg" alt="تورتيلا زنجر كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تورتيلا زنجر كبير</span>
+                <span class="price-tag">11 ر.ي</span>
+              </div>
+              <p class="item-desc">قطع الزنجر المقرمشة الحارة ملفوفة بعناية في خبز التورتيلا اللذيذ.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا زنجر كبير', 11, 'مقلي 🍗')">+ إضافة للطلب (11 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- تورتيلا زنجر برجر صغير -->
+          <div class="card" data-item-id="تورتيلا زنجر برجر صغير">
+            <div class="card-img-wrapper"><img src="img/تورتيلا زنجر صغير.jpeg" alt="تورتيلا زنجر برجر صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تورتيلا زنجر برجر صغير</span>
+                <span class="price-tag">8 ر.ي</span>
+              </div>
+              <p class="item-desc">ساندوتش تورتيلا خفيف ومقرمش بقطع زنجر متبلة وغنية بالصوص.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا زنجر برجر صغير', 8, 'مقلي 🍗')">+ إضافة للطلب (8 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- سندوتش مسحب دجاج كبير -->
+          <div class="card" data-item-id="سندوتش مسحب دجاج كبير">
+            <div class="card-img-wrapper"><img src="img/مسحب.jpeg" alt="سندوتش مسحب دجاج كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">سندوتش مسحب دجاج كبير</span>
+                <span class="price-tag">10 ر.ي</span>
+              </div>
+              <p class="item-desc">أصابع مسحب الدجاج الذهبي المقرمش مع الثومية والبطاطس بالحجم الكبير.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('سندوتش مسحب دجاج كبير', 10, 'مقلي 🍗')">+ إضافة للطلب (10 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- سندوتش مسحب دجاج صغير -->
+          <div class="card" data-item-id="سندوتش مسحب دجاج صغير">
+            <div class="card-img-wrapper"><img src="img/مسحب صغير.jpeg" alt="سندوتش مسحب دجاج صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">سندوتش مسحب دجاج صغير</span>
+                <span class="price-tag">8 ر.ي</span>
+              </div>
+              <p class="item-desc">وجبة خفيفة من مسحب الدجاج المتبل والمقرمش مع الصوص الخاص.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('سندوتش مسحب دجاج صغير', 8, 'مقلي 🍗')">+ إضافة للطلب (8 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- صحن بطاطس صغير -->
+          <div class="card" data-item-id="صحن بطاطس صغير">
+            <div class="card-img-wrapper"><img src="img/صحن شبس صغير (1).jpeg" alt="صحن بطاطس صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن بطاطس صغير</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag">صافي: 3 ر.ي</span>
+                  <span class="price-sub">جبن: 6 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">أصابع بطاطس مقلية ذهبية مقرمشة ولذيذة.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemByName('صحن بطاطس صغير', 'base')">+ صافي (3)</button>
+                <button class="btn-add" onclick="openItemByName('صحن بطاطس صغير', 'cheese')">+ مع جبن (6)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- صحن بطاطس كبير -->
+          <div class="card" data-item-id="صحن بطاطس كبير">
+            <div class="card-img-wrapper"><img src="img/صحن شبس كبير.jpeg" alt="صحن بطاطس كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن بطاطس كبير</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag">صافي: 5 ر.ي</span>
+                  <span class="price-sub">جبن: 8 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">كمية كبيرة ومقرمشة من البطاطس المقلية الطازجة.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemByName('صحن بطاطس كبير', 'base')">+ صافي (5)</button>
+                <button class="btn-add" onclick="openItemByName('صحن بطاطس كبير', 'cheese')">+ مع جبن (8)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('tortillaTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 5: وجبات شاورمايشن -->
+  <section class="menu-section" id="meals" style="background: rgba(20,13,11,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>قسم الوجبات المتكاملة</h2>
+        <p>وجبات متكاملة مع البطاطس والمشروب الغازي والصلصات اللذيذة</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('mealsTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="mealsTrack">
+          <!-- وجبة برجر دجاج متكاملة -->
+          <div class="card" data-item-id="وجبة برجر دجاج متكاملة">
+            <div class="card-img-wrapper"><img src="img/برجر زنجر مع شبس وبطاطس.jpeg" alt="وجبة برجر دجاج متكاملة"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">وجبة برجر دجاج متكاملة</span>
+                <span class="price-tag">14 ر.ي</span>
+              </div>
+              <p class="item-desc">تتكون الوجبة من: بطاطس مقرمشة مع برجر دجاج مع مشروب غازي.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 14, 'مشوي 🔥')">+ مشوي 🔥 (14)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 14, 'مقلي 🍗')">+ مقلي 🍗 (14)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- وجبة توست دجاج متكاملة -->
+          <div class="card" data-item-id="وجبة توست دجاج متكاملة">
+            <div class="card-img-wrapper"><img src="img/وجبة توست دجاج.jpeg" alt="وجبة توست دجاج"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">وجبة توست دجاج متكاملة</span>
+                <span class="price-tag">13 ر.ي</span>
+              </div>
+              <p class="item-desc">تتكون الوجبة من: توست دجاج محمص مع بطاطس ومشروب غازي.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 13, 'مشوي 🔥')">+ مشوي 🔥 (13)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 13, 'مقلي 🍗')">+ مقلي 🍗 (13)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- وجبة زنجر متكاملة -->
+          <div class="card" data-item-id="وجبة زنجر متكاملة">
+            <div class="card-img-wrapper"><img src="img/برجر لحم وجبه مع شبس وبطاطس.jpeg" alt="وجبة زنجر متكاملة"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">وجبة زنجر متكاملة</span>
+                <span class="price-tag">14 ر.ي</span>
+              </div>
+              <p class="item-desc">تتكون الوجبة من: بطاطس مع برجر زنجر مقرمش ومشروب غازي بارد.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('وجبة زنجر متكاملة', 14, 'مقلي 🍗')">+ إضافة للطلب (14 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- تشيكن فرايز صغير -->
+          <div class="card" data-item-id="تشيكن فرايز صغير">
+            <div class="card-img-wrapper"><img src="img/تشكن فرايز صغير.jpeg" alt="تشيكن فرايز صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تشيكن فرايز صغير</span>
+                <span class="price-tag price-display-single">10 ر.ي</span>
+              </div>
+              <p class="item-desc">بطاطس مقلية مغطاة بقطع الدجاج والجبنة والصلصات الشهية.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز صغير', 'single')">+ إضافة (10)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- تشيكن فرايز كبير -->
+          <div class="card" data-item-id="تشيكن فرايز كبير">
+            <div class="card-img-wrapper"><img src="img/تشكن فررايز شوارمايشن كبير.jpeg" alt="تشيكن فرايز كبير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تشيكن فرايز كبير</span>
+                <span class="price-tag price-display-single">15 ر.ي</span>
+              </div>
+              <p class="item-desc">صحن تشيكن فرايز كبير مشبع بالدجاج المقرمش والجبن الذائب.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز كبير', 'single')">+ إضافة (15)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('mealsTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 6: قسم الإضافات -->
+  <section class="menu-section" id="addons" style="background: rgba(16,10,8,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>قسم الإضافات</h2>
+        <p>خيارات الصلصات والصوصات اللذيذة لتخصيص وجبتك</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('addonsTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="addonsTrack">
+          <div class="card" data-item-id="إضافة: صوص ثوم">
+            <div class="card-img-wrapper"><img src="img/صوص ثوم.jpeg" alt="صوص ثوم"></div>
+            <div class="card-content" style="text-align: center;">
+              <div class="card-top" style="justify-content: center;"><span class="item-title">صوص ثوم</span></div>
+              <div class="price-tag price-display-single" style="margin: 8px 0;">1 ر.ي</div>
+              <p class="item-desc">ثومية شاورمايشن الكلاسيكية الغنية والمخفوقة بطعم كريمي أصيل.</p>
+              <div class="card-footer" style="justify-content: center;">
+                <button class="btn-add btn-action-single" onclick="addDirectItemByName('إضافة: صوص ثوم')">+ أضف (1 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="إضافة: صوص كوكتيل">
+            <div class="card-img-wrapper"><img src="img/صوص كوكتيل.jpeg" alt="صوص كوكتيل"></div>
+            <div class="card-content" style="text-align: center;">
+              <div class="card-top" style="justify-content: center;"><span class="item-title">صوص كوكتيل</span></div>
+              <div class="price-tag price-display-single" style="margin: 8px 0;">1 ر.ي</div>
+              <p class="item-desc">مزيج متناغم من الصوصات الخاصة التي تمنح وجبتك نكهة لا تقاوم.</p>
+              <div class="card-footer" style="justify-content: center;">
+                <button class="btn-add btn-action-single" onclick="addDirectItemByName('إضافة: صوص كوكتيل')">+ أضف (1 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="إضافة: صوص طحينية">
+            <div class="card-img-wrapper"><img src="img/صوص طحينية.jpeg" alt="صوص طحينية"></div>
+            <div class="card-content" style="text-align: center;">
+              <div class="card-top" style="justify-content: center;"><span class="item-title">صوص طحينية</span></div>
+              <div class="price-tag price-display-single" style="margin: 8px 0;">1 ر.ي</div>
+              <p class="item-desc">طحينة سمسم فاخرة ومتبلة لنكهة شاورما أصيلة ومميزة.</p>
+              <div class="card-footer" style="justify-content: center;">
+                <button class="btn-add btn-action-single" onclick="addDirectItemByName('إضافة: صوص طحينية')">+ أضف (1 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="إضافة: شطة حار">
+            <div class="card-img-wrapper"><img src="img/صوص  شحطة الحارة (1).jpeg" alt="شطة حار"></div>
+            <div class="card-content" style="text-align: center;">
+              <div class="card-top" style="justify-content: center;"><span class="item-title">شطة حار 🔥</span></div>
+              <div class="price-tag price-display-single" style="margin: 8px 0;">1 ر.ي</div>
+              <p class="item-desc">صوص فلفل حار متبل ومركز لعشاق النكهة الحارقة المشتعلة.</p>
+              <div class="card-footer" style="justify-content: center;">
+                <button class="btn-add btn-action-single" onclick="addDirectItemByName('إضافة: شطة حار')">+ أضف (1 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="إضافة: صوص جبنة">
+            <div class="card-img-wrapper"><img src="img/صوص جبنة.jpeg" alt="صوص جبنة"></div>
+            <div class="card-content" style="text-align: center;">
+              <div class="card-top" style="justify-content: center;"><span class="item-title">صوص جبنة 🧀</span></div>
+              <div class="price-tag price-display-single" style="margin: 8px 0;">2 ر.ي</div>
+              <p class="item-desc">صلصة جبن شيدر ذائبة وغنية تعطي طعماً كريمياً يذوب في الفم.</p>
+              <div class="card-footer" style="justify-content: center;">
+                <button class="btn-add btn-action-single" onclick="addDirectItemByName('إضافة: صوص جبنة')">+ أضف (2 ر.ي)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('addonsTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القسم 7: المشروبات الباردة -->
+  <section class="menu-section" id="drinks" style="background: rgba(20,13,11,0.95);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>المشروبات الباردة والمنعشة</h2>
+        <p>استخدم الأسهم يميناً ويساراً لاستعراض أصناف المشروبات</p>
+      </div>
+
+      <div class="section-slider-wrapper">
+        <button class="slider-arrow-btn arrow-right" onclick="scrollSection('drinksTrack', 'right')" aria-label="التالي">❯</button>
+
+        <div class="slider-track" id="drinksTrack">
+          <div class="card" data-item-id="كوكاكولا">
+            <div class="card-img-wrapper"><img src="img/كولا.jpeg" alt="كوكاكولا باردة"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">كوكاكولا</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('كوكاكولا')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="كولا لايت">
+            <div class="card-img-wrapper"><img src="img/كولا لايت.jpeg" alt="كولا دايت"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">كولا دايت / لايت</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('كولا لايت')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="فانتا برتقال">
+            <div class="card-img-wrapper"><img src="img/فانتا برتقال.jpeg" alt="فانتا برتقال"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">فانتا برتقال</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('فانتا برتقال')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="فانتا حمضيات">
+            <div class="card-img-wrapper"><img src="img/فانتا حمضيات.jpeg" alt="فانتا حمضيات"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">فانتا حمضيات</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('فانتا حمضيات')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="فانتا فراولة">
+            <div class="card-img-wrapper"><img src="img/فانتا فرولة.jpeg" alt="فانتا فراولة"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">فانتا فراولة</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('فانتا فراولة')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="سبرايت">
+            <div class="card-img-wrapper"><img src="img/سبرايت.jpeg" alt="سبرايت منعش" onerror="this.onerror=null; this.src='img/سبرايت_2.jpeg';"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">سبرايت</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('سبرايت')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="عصير ربيع">
+            <div class="card-img-wrapper"><img src="img/عصير ربيع.jpeg" alt="عصير ربيع"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">عصير ربيع</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">2 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('عصير ربيع')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="ماء كبير">
+            <div class="card-img-wrapper"><img src="img/ماء صحي كبير.jpeg" alt="ماء صحي نقي كبير"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">ماء صحي (كبير)</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">1 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('ماء كبير')">إضافة</button>
+               </div>
+            </div>
+          </div>
+
+          <div class="card" data-item-id="ماء صغير">
+            <div class="card-img-wrapper"><img src="img/ماء صحي صغير.jpeg" alt="ماء صحي نقي صغير"></div>
+            <div class="card-content" style="text-align: center; justify-content: center;">
+               <span class="item-title" style="font-size: 1.25rem; margin-bottom: 8px;">ماء صحي (صغير)</span>
+               <span class="price-tag price-display-single" style="font-size: 1.4rem; margin-bottom: 15px;">0.05 ر.ي</span>
+               <div class="card-footer" style="justify-content: center;">
+                 <button class="btn-add btn-action-single" onclick="addDirectItemByName('ماء صغير')">إضافة</button>
+               </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-arrow-btn arrow-left" onclick="scrollSection('drinksTrack', 'left')" aria-label="السابق">❮</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-bar" id="contact">
+    <div class="info-card">
+      <h2 style="color: var(--secondary); font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem;">للطلب والتوصيل السريع 🛵</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem;">حدد وجباتك المفضلة واضغط على زر الطلب لنجهزها لك فوراً</p>
+      <a href="tel:0500953327" id="footerPhoneLink" class="phone-number">📞 0500953327</a>
+      <div class="location-text" id="footerLocationText">📍 فرع حلي (المثلث أمام مستوصف العلوي الطبي)</div>
+      <button onclick="openCartReviewModal()" class="btn-glow" style="display: inline-block; margin-top: 1rem; font-size: 1.1rem;">إتمام الطلب عبر واتساب 💬</button>
+    </div>
+    <p style="margin-top: 2rem; color: #777; font-size: 0.85rem;">جميع الحقوق محفوظة لمطعم شاورمايشن © 2026</p>
+  </footer>
+
+  <div class="cart-float" onclick="openCartReviewModal()" title="اضغط لمراجعة السلة وإتمام الطلب">
+    🛒 الطلبات: <span id="cartCount">0</span> | الإجمالي: <span id="cartSum">0.00</span> ر.ي
+  </div>
+
+  <!-- نافذة التخصيص التفصيلي الديناميكية -->
+  <div id="customizeModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalItemTitle">تخصيص الصنف 🥪</h3>
+        <span class="close-btn" onclick="closeCustomizeModal()">&times;</span>
+      </div>
+      <form id="customizeForm">
+        <!-- قسم خيار الخبز الديناميكي -->
+        <div id="breadSectionContainer">
+          <div class="option-group-title" id="breadSectionTitle">🥖 خيارات الخبز:</div>
+          <div class="options-grid" id="breadOptionsGrid"></div>
+          <div id="breadNotice" style="display:none; background: rgba(255, 140, 26, 0.18); border: 1px dashed var(--secondary); color: var(--accent); font-size: 0.84rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; margin-bottom: 8px;"></div>
+        </div>
+
+        <div id="cookingSectionContainer" style="display:none;">
+          <div class="option-group-title">🍳 نوع التحضير:</div>
+          <div class="options-grid" id="cookingOptionsGrid"></div>
+        </div>
+
+        <div id="cheeseSectionContainer" style="display:none;">
+          <div class="option-group-title">🧀 إضافة الجبن:</div>
+          <div class="options-grid" id="cheeseOptionsGrid"></div>
+        </div>
+
+        <!-- تفضيلات وملاحظات الطلب All Notes -->
+        <div class="option-group-title">✨ تفضيلات وملاحظات الطلب (All Notes):</div>
+        <div class="notes-chips-grid" id="notesChipsWrapper">
+          <label class="note-chip"><input type="checkbox" value="مع الجبن">مع الجبن</label>
+          <label class="note-chip"><input type="checkbox" value="بدون جبن">بدون جبن</label>
+          <label class="note-chip"><input type="checkbox" value="مخلل">مخلل</label>
+          <label class="note-chip"><input type="checkbox" value="مع الثوم">مع الثوم</label>
+          <label class="note-chip"><input type="checkbox" value="مع الكتشب">مع الكتشب</label>
+          <label class="note-chip"><input type="checkbox" value="مع الشطه العادي">مع الشطه العادي</label>
+          <label class="note-chip"><input type="checkbox" value="خس">خس</label>
+          <label class="note-chip"><input type="checkbox" value="صوصات خفيف">صوصات خفيف</label>
+          <label class="note-chip"><input type="checkbox" value="شطه حار خفيف">شطه حار خفيف</label>
+          <label class="note-chip"><input type="checkbox" value="بدون بطاطس">بدون بطاطس</label>
+          <label class="note-chip"><input type="checkbox" value="بدون كوكتيل">بدون كوكتيل</label>
+          <label class="note-chip"><input type="checkbox" value="بدون دجاج">بدون دجاج</label>
+          <label class="note-chip"><input type="checkbox" value="دجاج فقط">دجاج فقط</label>
+          <label class="note-chip"><input type="checkbox" value="دجاج وبطاطس">دجاج وبطاطس</label>
+          <label class="note-chip"><input type="checkbox" value="كل شي">كل شي</label>
+          <label class="note-chip"><input type="checkbox" value="بدون ثوم">بدون ثوم</label>
+          <label class="note-chip"><input type="checkbox" value="بدون كتشب">بدون كتشب</label>
+          <label class="note-chip"><input type="checkbox" value="بدون شطة">بدون شطة</label>
+          <label class="note-chip"><input type="checkbox" value="سبايسي">سبايسي</label>
+          <label class="note-chip"><input type="checkbox" value="مجمر">مجمر</label>
+        </div>
+
+        <div class="option-group-title">🔢 تحديد الكمية المطلوبة والحساب:</div>
+        <div class="qty-counter-box">
+          <div class="qty-controls">
+            <button type="button" class="btn-qty-step" onclick="changeCustomModalQty(-1)">−</button>
+            <span id="customModalQtyDisplay" class="qty-number">1</span>
+            <button type="button" class="btn-qty-step" onclick="changeCustomModalQty(1)">+</button>
+          </div>
+          <div>
+            <span style="font-size:0.85rem; color:var(--text-muted);">الإجمالي: </span>
+            <span id="customModalSubtotal" class="qty-subtotal-price">0.00 ر.ي</span>
+          </div>
+        </div>
+        <div id="freeItemHint" style="display:none; color:#25d366; font-size:0.85rem; font-weight:800; text-align:center; margin-top:4px;">
+          🎁 مبروك! سيتم إضافة الوجبة الرابعة مجاناً لحسابك تلقائياً في السلة.
+        </div>
+        <div class="option-group-title">✍️ ملاحظات خاصة إضافية إن وجدت:</div>
+        <textarea id="itemCustomNote" class="notes-textarea" rows="2" placeholder="اكتب أي ملاحظة أخرى هنا..."></textarea>
+        <button type="button" class="btn-modal-action" onclick="confirmItemCustomization()">تأكيد وإضافة للسلة 🛒</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة مراجعة السلة والإرسال لواتساب -->
+  <div id="cartReviewModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>مراجعة تفاصيل الطلبات 📋</h3>
+        <span class="close-btn" onclick="closeCartReviewModal()">&times;</span>
+      </div>
+
+      <div id="cartItemsListContainer"></div>
+
+      <div style="margin-top: 1.5rem;">
+        <label style="font-weight: 800; color: var(--accent);">🚚 اختر طريقة استلام الطلب:</label>
+        <div class="select-wrapper" style="margin-top: 5px;">
+            <select id="deliverySelect" onchange="toggleDeliveryOptions()" class="input-field" style="font-weight: bold; background: rgba(66, 24, 12, 0.9);">
+                <option value="توصيل">توصيل للموقع (رسوم 10 ر.ي)</option>
+                <option value="استلام سيارة">استلام من مواقف المطعم (سيارة)</option>
+                <option value="من المحل">استلام شخصي من المحل</option>
+                <option value="إضافة على الطلب السابق">إضافة على الطلب السابق</option>
+            </select>
+        </div>
+        <button type="button" class="btn-modal-action" style="margin-top: 12px; background: linear-gradient(135deg, #0ea5e9, #38bdf8);" onclick="addAnotherOrder()">
+          + إضافة طلبات أخرى إلى السلة
+        </button>
+      </div>
+
+      <div id="deliveryExtraFields" style="margin-top: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+        <div id="locationField">
+           <label style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">👤 اسم العميل والحي / العنوان:</label>
+           <textarea id="customerAddress" class="notes-textarea" rows="2" placeholder="اكتب اسمك وعنوانك بالتفصيل..."></textarea>
+           <p style="color: #25d366; font-size: 0.85rem; margin-top: 8px; font-weight: bold;">
+              📍 ملاحظة: سيُطلب منك إرسال موقعك عبر خرائط جوجل (Google Maps) في الواتساب لتسهيل التوصيل السريع.
+           </p>
+        </div>
+
+        <div id="carField" style="display: none;">
+           <label style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">🚗 بيانات سيارتك:</label>
+           <input type="text" id="carDetails" class="input-field" placeholder="مثال: تويوتا كامري لون أبيض - لوحة (1234)">
+        </div>
+
+        <div id="storeField" style="display: none;">
+           <label style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">👤 بيانات المستلم:</label>
+           <input type="text" id="storeName" class="input-field" placeholder="اسم المستلم">
+           <input type="tel" id="storePhone" class="input-field" placeholder="رقم الجوال للتواصل">
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; border-top: 1px dashed rgba(255, 140, 26, 0.4); padding-top: 1rem; font-weight: 900; font-size: 1.3rem; color: var(--accent); display:flex; justify-content:space-between; align-items:center;">
+        <span>الإجمالي المستحق: <span id="cartModalTotal">0.00</span> ر.ي</span>
+      </div>
+
+      <button type="button" class="btn-modal-action" onclick="sendFullOrderToWhatsApp()">تأكيد وإرسال عبر واتساب 💬</button>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       قائمة أسعار فرع حلي المعتمدة رسمياً 100%
+       ======================================================== */
+    const BRANCH_DATA = {
+      navLabel: "فرع حلي",
+      footerLocation: "📍 حلي - المثلث أمام مستوصف العلوي الطبي",
+      phone: "966500953327",
+      displayPhone: "0500953327",
+      prices: {
+        "صحن عربي كبير": { base: 18, cheese: 20 },
+        "صحن عربي وسط": { base: 16, cheese: 18 },
+        "صحن عربي صغير": { base: 13, cheese: 15 },
+        "باشكا إيطالي": { base: 18, cheese: 20 },
+        "كلوب زنجر": { base: 18, cheese: 20 },
+        "كلوب شاورما": { base: 18, cheese: 20 },
+        "شاورما صاروخ": { base: 8, cheese: 9 },
+        "شاورما وسط": { base: 5, cheese: 6 },
+        "ساندوتش شاورمايشن": { base: 10, cheese: 11 },
+        "شاورما جامبو": { base: 9, cheese: 10 },
+        "توست شاورما": { base: 8, cheese: 9 },
+        "برجر شاورما": { base: 8, cheese: 9 },
+        "برجر دجاج": { base: 9 },
+        "جانبو دجاج برجر": { base: 10 },
+        "برجر دبل دجاج": { base: 14 },
+        "برجر زنجر": { base: 9 },
+        "برجر زنجر دبل": { base: 14 },
+        "جانبو زنجر": { base: 10 },
+        "توست دجاج برجر": { base: 8 },
+        "تورتيلا دجاج برجر صغير": { base: 7 },
+        "تورتيلا دجاج برجر كبير": { base: 11 },
+        "تورتيلا زنجر كبير": { base: 11 },
+        "تورتيلا زنجر برجر صغير": { base: 8 },
+        "سندوتش مسحب دجاج كبير": { base: 10 },
+        "سندوتش مسحب دجاج صغير": { base: 8 },
+        "صحن بطاطس صغير": { base: 3, cheese: 6 },
+        "صحن بطاطس كبير": { base: 5, cheese: 8 },
+        "وجبة توست دجاج متكاملة": { base: 13 },
+        "تشيكن فرايز صغير": { single: 10 },
+        "تشيكن فرايز كبير": { single: 15 },
+        "وجبة زنجر متكاملة": { base: 15 },
+        "وجبة برجر دجاج متكاملة": { base: 14 },
+        "إضافة: صوص ثوم": { single: 1 },
+        "إضافة: صوص كوكتيل": { single: 1 },
+        "إضافة: صوص طحينية": { single: 1 },
+        "إضافة: شطة حار": { single: 1 },
+        "إضافة: صوص جبنة": { single: 2 },
+        "كوكاكولا": { single: 2 },
+        "كولا لايت": { single: 2 },
+        "فانتا برتقال": { single: 2 },
+        "فانتا حمضيات": { single: 2 },
+        "فانتا فراولة": { single: 2 },
+        "سبرايت": { single: 2 },
+        "عصير ربيع": { single: 2 },
+        "ماء كبير": { single: 1 },
+        "ماء صغير": { single: 0.05 }
+      }
+    };
+
+    let cart = [];
+    let currentCustomizingItem = null;
+    let currentCustomizingQty = 1;
+    const branchName = "حلي";
+    const restaurantPhone = BRANCH_DATA.phone;
+    const DRINK_NAMES = new Set([
+      'كوكاكولا',
+      'كولا لايت',
+      'فانتا برتقال',
+      'فانتا حمضيات',
+      'فانتا فراولة',
+      'سبرايت',
+      'عصير ربيع',
+      'ماء كبير',
+      'ماء صغير'
+    ]);
+
+    function isDrinkItemName(name) {
+      if (!name) return false;
+      return DRINK_NAMES.has(name) || /ماء|كوكاكولا|كولا|فانتا|سبرايت|عصير ربيع/i.test(name);
+    }
+
+    function isAddonItemName(name) {
+      if (!name) return false;
+      return /^إضافة\s*:|^إضافة\s/.test(name.trim());
+    }
+
+    function isFamilyOfferExcludedItemName(name) {
+      return isDrinkItemName(name) || isAddonItemName(name);
+    }
+
+    // تفعيل تفاعل أزرار الملاحظات السريعة Chips
+    document.querySelectorAll('.note-chip input').forEach(input => {
+      input.addEventListener('change', function() {
+        if (this.checked) {
+          this.parentElement.classList.add('active');
+        } else {
+          this.parentElement.classList.remove('active');
+        }
+      });
+    });
+
+    // إخفاء الـ Splash Screen تلقائياً بعد ثانيتين
+    function dismissSplashScreen() {
+      const splash = document.getElementById('splashScreen');
+      if (splash && !splash.classList.contains('fade-out')) {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 800);
+      }
+    }
+
+    function scrollSection(trackId, direction) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+      const scrollAmount = track.clientWidth * 0.92;
+      if (direction === 'left') {
+        track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+
+    // فتح التخصيص للأصناف العادية
+    function openItemByName(itemId, type) {
+      const itemPricing = BRANCH_DATA.prices[itemId];
+      if (!itemPricing) return;
+
+      let chosenName = itemId;
+      let chosenPrice = 0;
+
+      let defaultCheeseChoice = 'بدون جبن';
+
+      if (type === 'base') {
+        chosenName = itemId.includes('بطاطس') ? `${itemId} (صافي)` : `${itemId} (بدون جبنة)`;
+        chosenPrice = itemPricing.base;
+      } else if (type === 'cheese') {
+        chosenName = itemId.includes('بطاطس') ? `${itemId} (جبن)` : `${itemId} (جبنة)`;
+        chosenPrice = itemPricing.cheese;
+        defaultCheeseChoice = itemId.includes('بطاطس') ? 'مع جبن (+3 ر.ي)' : itemId.includes('صحن') ? 'مع جبن (+2 ر.ي)' : 'مع جبن (+1 ر.ي)';
+      } else if (type === 'single') {
+        chosenPrice = itemPricing.single;
+      }
+
+      openCustomizeModal(chosenName, chosenPrice, null, defaultCheeseChoice);
+    }
+
+    function getOptionExtraPrice(option) {
+      const match = option?.match(/\+\s*(\d+(?:\.\d+)?)\s*ر\.ي/);
+      return match ? Number(match[1]) : 0;
+    }
+
+    // دالة مخصصة للأزرار الخارجية التي تختار نوع التحضير مباشرة (مشوي / مقلي)
+    function openItemWithPrep(itemId, price, prepChoice) {
+      openCustomizeModal(itemId, price, prepChoice);
+    }
+
+    function addDirectItemByName(itemId) {
+      const normalizedId = itemId && itemId.trim();
+      if (!normalizedId) return;
+
+      let itemPricing = BRANCH_DATA.prices[normalizedId];
+      if (!itemPricing) {
+        const compactKey = normalizedId.replace(/\s+/g, ' ');
+        itemPricing = Object.entries(BRANCH_DATA.prices).find(([key]) => key.replace(/\s+/g, ' ') === compactKey)?.[1];
+      }
+
+      if (!itemPricing) {
+        console.warn('Missing price for item:', itemId);
+        return;
+      }
+
+      const directPrice = itemPricing.single ?? itemPricing.base ?? 0;
+      addDirectItem(normalizedId, directPrice);
+    }
+
+    /* ========================================================
+       تخصيص خيارات الخبز وفقاً للشروط التسعة بدقة:
+       ======================================================== */
+    function setupBreadOptions(itemName) {
+      const container = document.getElementById('breadSectionContainer');
+      const grid = document.getElementById('breadOptionsGrid');
+      const title = document.getElementById('breadSectionTitle');
+      const notice = document.getElementById('breadNotice');
+      
+      notice.style.display = 'none';
+
+      // 1. سندوتش شاورمايشن: خبز أبيض وصاج
+      if (itemName.includes('ساندوتش شاورمايشن')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع الخبز:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 2. كلوب زنجر وشاورما: الأسمر 2 ريالين (+2 ر.ي)
+      if (itemName.includes('كلوب')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع خبز التوست:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="توست أبيض" checked onchange="updateCustomModalQtyDisplay()"> توست أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="توست أسمر (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">توست أسمر (+2 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 3. كل توست في سندوتش أو في وجبات أو توست برجر: أبيض أو أسمر (+1 ر.ي)
+      if (itemName.includes('توست')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع خبز التوست:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="توست أبيض" checked onchange="updateCustomModalQtyDisplay()"> توست أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="توست أسمر (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">توست أسمر (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 4. المسحب الكبير: أبيض + صاج (+1 ر.ي)
+      if (itemName.includes('مسحب') && itemName.includes('كبير')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع الخبز:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 5. المسحب الصغير: أبيض + صاج (+1 ر.ي) + أسمر (+1 ر.ي)
+      if (itemName.includes('مسحب') && itemName.includes('صغير')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع الخبز:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أسمر (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز أسمر (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 6. تورتيلا كبير: أبيض، صاج (+1 ر.ي)، أسمر (+1 ر.ي)
+      if (itemName.includes('تورتيلا') && itemName.includes('كبير')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع الخبز:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أسمر (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز أسمر (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 7. تورتيلا صغير: أبيض، صاج (+1 ر.ي)، أسمر (+1 ر.ي)
+      if (itemName.includes('تورتيلا') && itemName.includes('صغير')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 نوع الخبز:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز أسمر (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز أسمر (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 8. الصحن العربي: إضافة خبز صاج
+      if (itemName.includes('صحن عربي')) {
+        container.style.display = 'block';
+        title.innerText = '🥖 إضافة خبز صاج إضافي مع الصحن:';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_bread" value=" خبز ابيض" checked onchange="updateCustomModalQtyDisplay()">  خبز ابيض</label>
+          <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+2 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      // 9. إخفاء خيار الخبز عن باقي أنواع البرجر العادية وباقي الوجبات والبطاطس والفرايز والباشكا
+      if (
+        itemName.includes('برجر') || 
+        itemName.includes('جانبو') || 
+        itemName.includes('جامبو') ||
+        itemName.includes('وجبة') ||
+        itemName.includes('باشكا') || 
+        itemName.includes('بطاطس') || 
+        itemName.includes('فرايز')
+      ) {
+        container.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+      }
+
+      // 10. شاورما الصاروخ والشاورما العادية: الخبز الأسمر بـ 1 ريال (+1 ر.ي) والخبز الصاج بـ 1 ريال (+1 ر.ي)
+      container.style.display = 'block';
+      title.innerText = '🥖 نوع الخبز:';
+      grid.innerHTML = `
+        <label class="option-item"><input type="radio" name="opt_bread" value="خبز أبيض" checked onchange="updateCustomModalQtyDisplay()"> خبز أبيض</label>
+        <label class="option-item"><input type="radio" name="opt_bread" value="خبز أسمر (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز أسمر (+1 ر.ي)</span></label>
+        <label class="option-item"><input type="radio" name="opt_bread" value="خبز صاج (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">خبز صاج (+1 ر.ي)</span></label>
+      `;
+    }
+
+    /* ========================================================
+       إعداد خيار نوع التحضير في النافذة
+       ======================================================== */
+    function setupCookingOptions(itemName, presetPrep) {
+      const cookingContainer = document.getElementById('cookingSectionContainer');
+      const cookingGrid = document.getElementById('cookingOptionsGrid');
+      if (!cookingContainer || !cookingGrid) return;
+
+      const hasCookingPrepItem = /(?:برجر\s*دجاج|برجر\s*دبل\s*دجاج|(?:جام|جان)بو\s*دجاج\s*برجر|توست\s*دجاج\s*برجر|تورتيلا\s*دجاج\s*برجر|وجبة\s*برجر\s*دجاج\s*متكاملة|وجبة\s*توست\s*دجاج\s*متكاملة|وجبة\s*دجاج|وجبة\s*توست\s*دجاج|دجاج\s*برجر)/.test(itemName);
+      const isNoCookingItem = /(?:برجر\s*زنجر|برجر\s*زنجر\s*دبل|(?:جام|جان)بو\s*زنجر|تورتيلا\s*زنجر|كلوب\s*زنجر|كلوب\s*شاورما|توست.*زنجر)/.test(itemName);
+      const shouldShowCooking = hasCookingPrepItem && !isNoCookingItem;
+
+      if (!shouldShowCooking) {
+        cookingContainer.style.display = 'none';
+        cookingGrid.innerHTML = '';
+        return;
+      }
+
+      cookingContainer.style.display = 'block';
+      const selectedPrep = presetPrep && presetPrep.includes('مقلي') ? 'مقلي' : 'مشوي';
+      cookingGrid.innerHTML = `
+        <label class="option-item"><input type="radio" name="opt_cooking" value="مشوي" ${selectedPrep === 'مشوي' ? 'checked' : ''} onchange="updateCustomModalQtyDisplay()"> مشوي</label>
+        <label class="option-item"><input type="radio" name="opt_cooking" value="مقلي" ${selectedPrep === 'مقلي' ? 'checked' : ''} onchange="updateCustomModalQtyDisplay()"> مقلي</label>
+      `;
+    }
+
+    function setupCheeseOptions(itemName) {
+      const container = document.getElementById('cheeseSectionContainer');
+      const grid = document.getElementById('cheeseOptionsGrid');
+      if (!container || !grid) return;
+
+      const isPlateItem = /صحن|باشكا|كلوب زنجر/.test(itemName);
+      const isSandwichItem = /شاورما|ساندوتش|توست/.test(itemName);
+      const isMashebItem = /مسحب/.test(itemName);
+      const isBurgerOrTortillaItem = /برجر|تورتيلا/.test(itemName);
+      const isMealItem = /وجبة|متكاملة/.test(itemName);
+
+      if (!isPlateItem && !isSandwichItem && !isMashebItem && !isBurgerOrTortillaItem && !isMealItem) {
+        container.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+      }
+
+      if (isBurgerOrTortillaItem || isMashebItem || isMealItem) {
+        container.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+      }
+
+      if (itemName.includes('كلوب زنجر')) {
+        container.style.display = 'block';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+2 ر.ي)</span></label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="دبل جبن (+4 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">دبل جبن (+4 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      if (itemName.includes('صحن بطاطس صغير')) {
+        container.style.display = 'block';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+3 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+3 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      if (itemName.includes('صحن بطاطس كبير')) {
+        container.style.display = 'block';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+3 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+3 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      if (itemName.includes('كلوب شاورما')) {
+        container.style.display = 'block';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+2 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      if (isSandwichItem) {
+        container.style.display = 'block';
+        grid.innerHTML = `
+          <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+1 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+1 ر.ي)</span></label>
+        `;
+        return;
+      }
+
+      container.style.display = 'block';
+      grid.innerHTML = `
+        <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
+        <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+2 ر.ي)</span></label>
+        <label class="option-item"><input type="radio" name="opt_cheese" value="دبل جبن (+4 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">دبل جبن (+4 ر.ي)</span></label>
+      `;
+    }
+
+    function updateCheeseNoteChipsVisibility(itemName) {
+      const cheeseNoteValues = new Set(['مع الجبن', 'بدون جبن']);
+      const shouldHideCheeseNotes = /صحن|باشكا|كلوب زنجر|شاورما|ساندوتش|توست/.test(itemName);
+
+      document.querySelectorAll('.note-chip').forEach(chip => {
+        const input = chip.querySelector('input');
+        if (!input || !cheeseNoteValues.has(input.value)) {
+          return;
+        }
+
+        chip.style.display = shouldHideCheeseNotes ? 'none' : '';
+        chip.classList.remove('active');
+        input.checked = false;
+      });
+    }
+
+    function openCustomizeModal(name, price, presetPrep) {
+      const cleanBaseName = name.replace(' (بدون جبنة)', '').replace(' (جبنة)', '').replace(' (صافي)', '').replace(' (جبن)', '');
+      currentCustomizingItem = { name: cleanBaseName, basePrice: price, presetPrep: presetPrep };
+      currentCustomizingQty = 1;
+      
+      document.getElementById('modalItemTitle').innerText = `تخصيص: ${cleanBaseName}`;
+      document.getElementById('customizeForm').reset();
+      
+      setupBreadOptions(cleanBaseName);
+      setupCookingOptions(cleanBaseName, presetPrep);
+      setupCheeseOptions(cleanBaseName);
+      updateCheeseNoteChipsVisibility(cleanBaseName);
+
+      document.querySelectorAll('.note-chip').forEach(chip => {
+        chip.classList.remove('active');
+        chip.querySelector('input').checked = false;
+      });
+
+      document.getElementById('itemCustomNote').value = '';
+      updateCustomModalQtyDisplay();
+      document.getElementById('customizeModal').style.display = 'flex';
+    }
+
+    function changeCustomModalQty(delta) {
+      currentCustomizingQty += delta;
+      if (currentCustomizingQty < 1) currentCustomizingQty = 1;
+      updateCustomModalQtyDisplay();
+    }
+
+    function showOfferToast() {
+      const toast = document.getElementById('offerToastAlert');
+      toast.classList.add('show');
+    }
+
+    function closeOfferToast() {
+      const toast = document.getElementById('offerToastAlert');
+      toast.classList.remove('show');
+    }
+
+    function updateCustomModalQtyDisplay() {
+      if (!currentCustomizingItem) return;
+
+      document.getElementById('customModalQtyDisplay').innerText = currentCustomizingQty;
+      
+      const breadOpt = document.querySelector('input[name="opt_bread"]:checked');
+      const cheeseOpt = document.querySelector('input[name="opt_cheese"]:checked');
+      const breadExtra = getOptionExtraPrice(breadOpt?.value);
+      const cheeseExtra = getOptionExtraPrice(cheeseOpt?.value);
+      const notice = document.getElementById('breadNotice');
+
+      if (breadOpt) {
+        if (breadExtra > 0) {
+          notice.style.display = 'block';
+          notice.innerText = `ℹ️ تم احتساب +${breadExtra} ر.ي لاختيار الإضافة.`;
+        } else {
+          notice.style.display = 'none';
+        }
+      } else {
+        notice.style.display = 'none';
+      }
+
+      const unitPrice = currentCustomizingItem.basePrice + breadExtra + cheeseExtra;
+      const subtotal = unitPrice * currentCustomizingQty;
+      document.getElementById('customModalSubtotal').innerText = `${subtotal.toFixed(2)} ر.ي`;
+
+      const currentInCartCount = cart.filter(it => it.baseName === currentCustomizingItem.name && !it.isFree && !isFamilyOfferExcludedItemName(it.baseName))
+                                     .reduce((sum, it) => sum + it.qty, 0);
+      const hint = document.getElementById('freeItemHint');
+      if (!isFamilyOfferExcludedItemName(currentCustomizingItem.name) && currentInCartCount + currentCustomizingQty >= 3) {
+        hint.style.display = 'block';
+      } else {
+        hint.style.display = 'none';
+      }
+    }
+
+    function closeCustomizeModal() {
+      document.getElementById('customizeModal').style.display = 'none';
+    }
+
+    function evaluateCartFamilyOffers() {
+      const eligibleItems = cart.filter(item => !item.isFree && !isFamilyOfferExcludedItemName(item.baseName));
+
+      let baseCounts = {};
+      eligibleItems.forEach(item => {
+        baseCounts[item.baseName] = (baseCounts[item.baseName] || 0) + item.qty;
+      });
+
+      const existingFreeItems = cart.filter(item => item.isFree);
+      const freeNames = new Set(existingFreeItems.map(item => item.baseName));
+      cart = cart.filter(item => !item.isFree || !freeNames.has(item.baseName));
+
+      let newlyEarnedGift = false;
+
+      Object.keys(baseCounts).forEach(bName => {
+        const totalPaidCount = baseCounts[bName];
+        const freeCountEarned = Math.floor(totalPaidCount / 3);
+
+        if (freeCountEarned > 0) {
+          const existingFreeCount = cart.filter(item => item.isFree && item.baseName === bName).reduce((sum, item) => sum + item.qty, 0);
+          const neededFreeCount = freeCountEarned - existingFreeCount;
+
+          if (neededFreeCount > 0) {
+            cart.push({
+              name: `${bName} (هدية العرض)`,
+              baseName: bName,
+              price: 0,
+              qty: neededFreeCount,
+              options: ["وجبة مجانية ضمن عرض الأسرة 🎁"],
+              customNote: "",
+              isFree: true
+            });
+            newlyEarnedGift = true;
+          }
+        }
+      });
+
+      return newlyEarnedGift;
+    }
+
+    function confirmItemCustomization() {
+      if (!currentCustomizingItem) return;
+
+      let options = [];
+      let breadExtra = 0;
+      let cheeseExtra = 0;
+
+      // نوع الخبز
+      const breadOpt = document.querySelector('input[name="opt_bread"]:checked');
+      if (breadOpt) {
+        options.push(breadOpt.value);
+        breadExtra = getOptionExtraPrice(breadOpt.value);
+      }
+
+      const cookingOpt = document.querySelector('input[name="opt_cooking"]:checked');
+      if (cookingOpt) {
+        options.push(cookingOpt.value);
+      }
+
+      const cheeseOpt = document.querySelector('input[name="opt_cheese"]:checked');
+      if (cheeseOpt) {
+        options.push(cheeseOpt.value);
+        cheeseExtra = getOptionExtraPrice(cheeseOpt.value);
+      }
+
+      // الملاحظات السريعة
+      document.querySelectorAll('.note-chip input:checked').forEach(chk => {
+        options.push(chk.value);
+      });
+
+      const note = document.getElementById('itemCustomNote').value.trim();
+      const finalItemPrice = currentCustomizingItem.basePrice + breadExtra + cheeseExtra;
+
+      const previousTotalForThisItem = cart.filter(it => it.baseName === currentCustomizingItem.name && !it.isFree && !isFamilyOfferExcludedItemName(it.baseName))
+                                           .reduce((sum, it) => sum + it.qty, 0);
+
+      cart.push({ 
+        name: currentCustomizingItem.name, 
+        baseName: currentCustomizingItem.name,
+        price: finalItemPrice, 
+        qty: currentCustomizingQty, 
+        options: options, 
+        customNote: note,
+        isFree: false
+      });
+
+      evaluateCartFamilyOffers();
+
+      if (!isFamilyOfferExcludedItemName(currentCustomizingItem.name)) {
+        const newTotalForThisItem = cart.filter(it => it.baseName === currentCustomizingItem.name && !it.isFree && !isFamilyOfferExcludedItemName(it.baseName))
+                                        .reduce((sum, it) => sum + it.qty, 0);
+        
+        if (Math.floor(newTotalForThisItem / 3) > Math.floor(previousTotalForThisItem / 3)) {
+          showOfferToast();
+        }
+      }
+
+      updateCartUI();
+      closeCustomizeModal();
+    }
+
+    function addDirectItem(name, price) {
+      const previousTotal = cart.filter(it => it.baseName === name && !it.isFree && !isFamilyOfferExcludedItemName(it.baseName))
+                                .reduce((sum, it) => sum + it.qty, 0);
+
+      cart.push({ 
+        name: name, 
+        baseName: name, 
+        price: price, 
+        qty: 1, 
+        options: [], 
+        customNote: "", 
+        isFree: false 
+      });
+
+      evaluateCartFamilyOffers();
+
+      if (!isFamilyOfferExcludedItemName(name)) {
+        const newTotal = cart.filter(it => it.baseName === name && !it.isFree && !isFamilyOfferExcludedItemName(it.baseName))
+                             .reduce((sum, it) => sum + it.qty, 0);
+
+        if (Math.floor(newTotal / 3) > Math.floor(previousTotal / 3)) {
+          showOfferToast();
+        }
+      }
+
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      let totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+      let totalSum = updateCartModalTotal();
+      document.getElementById('cartCount').innerText = totalQty;
+      document.getElementById('cartSum').innerText = totalSum.toFixed(2);
+    }
+
+    function toggleDeliveryOptions() {
+      const method = document.getElementById('deliverySelect').value;
+            const showExtra = method === 'إضافة على الطلب السابق';
+      const showLocation = method === 'توصيل';
+      const showCar = method === 'استلام سيارة';
+      const showStore = method === 'من المحل';
+
+      document.getElementById('locationField').style.display = showLocation ? 'block' : 'none';
+      document.getElementById('carField').style.display = showCar ? 'block' : 'none';
+      document.getElementById('storeField').style.display = showStore ? 'block' : 'none';
+
+      if (showExtra) {
+        document.getElementById('deliveryExtraFields').style.display = 'none';
+      } else {
+        document.getElementById('deliveryExtraFields').style.display = 'block';
+      }
+
+      updateCartModalTotal();
+    }
+
+    function addAnotherOrder() {
+      closeCartReviewModal();
+
+      const menuSection = document.querySelector('.menu-section');
+      if (menuSection) {
+        menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function updateCartModalTotal() {
+       let subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+       const method = document.getElementById('deliverySelect').value;
+       if (method === 'توصيل') subtotal += 10;
+       document.getElementById('cartModalTotal').innerText = subtotal.toFixed(2);
+       return subtotal;
+    }
+
+    function openCartReviewModal() {
+      if (cart.length === 0) {
+        alert("سلة الطلبات فارغة! الرجاء اختيار الوجبات أولاً.");
+        return;
+      }
+      const container = document.getElementById('cartItemsListContainer');
+      container.innerHTML = "";
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        const box = document.createElement('div');
+        box.className = 'cart-item-preview';
+        box.style.borderColor = item.isFree ? '#25d366' : 'rgba(255, 140, 26, 0.3)';
+        box.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:${item.isFree ? '#25d366' : 'var(--secondary)'}; font-size:1rem;">
+              ${index + 1}. ${item.name} × ${item.qty} = ${item.isFree ? '0.00 ر.ي (مجاناً 🎁)' : itemTotal.toFixed(2) + ' ر.ي'}
+            </strong>
+            <button onclick="removeItemFromCart(${index})" style="background:#ff4d4f; color:#fff; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;">حذف</button>
+          </div>
+          <div style="font-size:0.83rem; color:var(--text-muted); margin-top:5px; line-height:1.5;">
+            ${item.options.length > 0 ? `<strong style="color:var(--accent);">التفاصيل والملاحظات:</strong> ${item.options.join(' ، ')}` : ''}
+            ${item.customNote ? `<br><strong style="color:#ff9e00;">ملاحظة إضافية:</strong> ${item.customNote}` : ''}
+          </div>
+        `;
+        container.appendChild(box);
+      });
+
+      toggleDeliveryOptions();
+      updateCartModalTotal();
+      document.getElementById('cartReviewModal').style.display = 'flex';
+    }
+
+    function closeCartReviewModal() { document.getElementById('cartReviewModal').style.display = 'none'; }
+
+    function removeItemFromCart(index) {
+      cart.splice(index, 1);
+      evaluateCartFamilyOffers();
+      updateCartUI();
+      if (cart.length === 0) closeCartReviewModal();
+      else openCartReviewModal();
+    }
+
+    function sendFullOrderToWhatsApp() {
+      if (cart.length === 0) return;
+
+      const method = document.getElementById('deliverySelect').value;
+      const customerAddress = document.getElementById('customerAddress').value.trim();
+      const carDetails = document.getElementById('carDetails').value.trim();
+      const storeName = document.getElementById('storeName').value.trim();
+      const storePhone = document.getElementById('storePhone').value.trim();
+      
+      let orderText = `السلام عليكم ورحمة الله،\nأرغب في تقديم طلب جديد من مطعم *شاورمايشن* - *فرع ${branchName}*:\n\n`;
+      orderText += "------------------------------------\n📋 *تفاصيل الطلبات:*\n";
+
+      let hasFreeItems = false;
+      cart.forEach((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        if(item.isFree) hasFreeItems = true;
+        orderText += `*${idx + 1}. ${item.name}*\n▫️ *العدد:* ${item.qty} × ${item.isFree ? 'مجاناً 🎁' : item.price.toFixed(2) + ' ر.ي'} = ${item.isFree ? '0.00 ر.ي (مجاني)' : itemTotal.toFixed(2) + ' ر.ي'}\n`;
+        if (item.options.length > 0) orderText += `▫️ *المواصفات والملاحظات:* ${item.options.join(' ، ')}\n`;
+        if (item.customNote) orderText += `▫️ *ملاحظة:* ${item.customNote}\n`;
+        orderText += "\n";
+      });
+
+      let itemsSum = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+      if (hasFreeItems) {
+        orderText += "🎁 *تطبيق عرض الأسرة:* تم الحصول على وجبة رابعة مجانية ضمن العرض بنجاح!\n";
+      }
+
+      orderText += "------------------------------------\n";
+      orderText += `🚚 *طريقة الاستلام:* ${method}\n`;
+      
+      if(method === 'إضافة على الطلب السابق') {
+          orderText += `📌 *ملاحظة:* هذا الطلب يضاف إلى الطلب السابق، بدون رسوم توصيل إضافية.\n`;
+      } else if(method === 'توصيل') {
+          orderText += `👤 *العميل / العنوان:* ${customerAddress ? customerAddress : 'لم يكتب العنوان'}\n`;
+          orderText += `📍 *الموقع:* (سيتم إرسال الموقع عبر خرائط جوجل)\n`;
+          orderText += `🛵 رسوم التوصيل: +10 ر.ي\n`;
+          itemsSum += 10;
+      } else if(method === 'استلام سيارة') {
+          orderText += `🚗 *بيانات السيارة:* ${carDetails ? carDetails : 'لم يحدد'}\n`;
+      } else if(method === 'من المحل') {
+          orderText += `👤 *اسم المستلم:* ${storeName ? storeName : 'لم يحدد'}\n`;
+          orderText += `📞 *رقم الجوال:* ${storePhone ? storePhone : 'لم يحدد'}\n`;
+      }
+
+      orderText += `\n💰 *الإجمالي الكلي المطلوب:* ${itemsSum.toFixed(2)} ر.ي\n`;
+      orderText += "يرجى تأكيد استلام الطلب. شكراً لكم!";
+
+      window.open(`https://wa.me/${restaurantPhone}?text=${encodeURIComponent(orderText)}`, '_blank');
+      cart = [];
+      updateCartUI();
+      closeCartReviewModal();
+    }
+
+    function openSimpleAdd(itemId) {
+      const itemPricing = BRANCH_DATA.prices[itemId];
+      if (!itemPricing) return;
+      const price = itemPricing.base ?? itemPricing.single ?? 0;
+      openCustomizeModal(itemId, price, null, 'بدون جبن');
+    }
+
+    // جعل أزرار الخارج "إضافة" فقط مع ترك تفاصيل الاختيارات داخل نافذة التخصيص
+    function simplifyExternalActionButtons() {
+      document.querySelectorAll('.card').forEach(card => {
+        const cardItemId = card.getAttribute('data-item-id');
+        const actionButtons = [...card.querySelectorAll('.btn-add')];
+        if (!actionButtons.length) return;
+
+        actionButtons.forEach((btn, index) => {
+          const onclick = btn.getAttribute('onclick') || '';
+          if (onclick.includes('openItemWithPrep') || onclick.includes('openItemByName')) {
+            btn.setAttribute('onclick', `openSimpleAdd(${JSON.stringify(cardItemId)})`);
+          }
+          btn.innerText = 'إضافة';
+        });
+
+        if (actionButtons.length > 1) {
+          actionButtons.slice(1).forEach(btn => btn.remove());
+        }
+      });
+    }
+
+    // إغلاق شاشة البداية تلقائياً
+    window.addEventListener('DOMContentLoaded', () => {
+      simplifyExternalActionButtons();
+      setTimeout(() => {
+        dismissSplashScreen();
+      }, 2000);
+    });
+  </script>
+
+<script>
+(function(){
+  const $=(q,r=document)=>r.querySelector(q),$$=(q,r=document)=>[...r.querySelectorAll(q)];
+  // شريط التقدم + النافبار
+  const bar=$('#scrollBar'),nav=$('nav');
+  addEventListener('scroll',()=>{const h=document.documentElement;bar.style.width=(scrollY/(h.scrollHeight-innerHeight)*100)+'%';nav.classList.toggle('scrolled',scrollY>40)},{passive:true});
+  // طعام يطفو في الهيرو
+  const rain=$('#foodRain'),em=['🌯','🍔','🍟','🥙','🌶️','🍅','🧀','🥤','🔥'];
+  if(rain)for(let i=0;i<16;i++){const e=document.createElement('span');e.className='fl';e.textContent=em[i%em.length];
+    e.style.cssText+=`left:${Math.random()*96}%;font-size:${1.4+Math.random()*1.8}rem;animation-duration:${9+Math.random()*10}s;animation-delay:${-Math.random()*14}s`;rain.appendChild(e)}
+  // توهج يتبع الماوس
+  const hero=$('.video-hero-wrapper'),glow=$('#heroGlow');
+  hero&&hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();glow.style.left=(e.clientX-r.left)+'px';glow.style.top=(e.clientY-r.top)+'px'});
+  // ظهور تدريجي
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const el=en.target;
+    el.style.transitionDelay=el.classList.contains('card')?((el.dataset.i||0)%4*90)+'ms':'0ms';el.classList.add('in');io.unobserve(el)}}),{threshold:.12});
+  $$('.slider-track').forEach(t=>$$('.card',t).forEach((c,i)=>{c.dataset.i=i;io.observe(c)}));
+  $$('.section-header').forEach(h=>io.observe(h));
+  // إمالة 3D + لمعان
+  $$('.card').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    c.style.setProperty('--mx',x*100+'%');c.style.setProperty('--my',y*100+'%');c.style.setProperty('--ry',((x-.5)*10)+'deg');c.style.setProperty('--rx',((.5-y)*10)+'deg')});
+    c.addEventListener('mouseleave',()=>{c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')})});
+  // تموّج + انفجار إيموجي + اهتزاز السلة
+  document.addEventListener('click',e=>{const b=e.target.closest('.btn-add');if(!b)return;
+    const r=b.getBoundingClientRect(),d=document.createElement('span');d.className='ripple';const z=Math.max(r.width,r.height);
+    d.style.cssText=`width:${z}px;height:${z}px;left:${e.clientX-r.left-z/2}px;top:${e.clientY-r.top-z/2}px`;b.appendChild(d);setTimeout(()=>d.remove(),600);
+    ['🔥','⭐','🍟','🌯','✨','🍅'].forEach((x,i)=>{const p=document.createElement('span');p.className='burst';p.textContent=x;
+      const a=(Math.PI*2/6)*i;p.style.left=e.clientX+'px';p.style.top=e.clientY+'px';p.style.setProperty('--dx',Math.cos(a)*70+'px');p.style.setProperty('--dy',Math.sin(a)*70-30+'px');
+      document.body.appendChild(p);setTimeout(()=>p.remove(),900)});
+    const c=$('.cart-float');if(c){c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}});
+})();
+</script>
+
+
+<div id="sideOv"></div>
+<aside id="sideDrawer" aria-label="القائمة الجانبية">
+  <div class="sd-head"><h3>✨ مفاجآت شاورمايشن</h3><button class="sd-x" id="sdClose" aria-label="إغلاق">×</button></div>
+  <div id="sdHome">
+    <button class="sd-opt" data-go="raffle"><span class="ic">🎁</span><span>تسجيل الدخول في سحب المهرجان<small>سجّل بياناتك وصورة فاتورتك (50 ريال فأكثر)</small></span></button>
+    <button class="sd-opt" data-go="game"><span class="ic">🎮</span><span>العب ليمر وقت الانتظار<small>لعبة "التقط الشاورما" 🌯</small></span></button>
+  </div>
+  <div class="sd-panel" id="pRaffle">
+    <button class="sd-back" data-go="home">→ رجوع</button>
+    <h3 style="color:#ffd23f;margin-bottom:.6rem">🎪 تسجيل الدخول في سحب المهرجان</h3>
+    <p class="note">للدخول في السحب: اكتب بياناتك واختر صورة فاتورتك، ثم سنفتح لك واتساب على رقم المحل. <b style="color:#ffd23f">يشترط ألا تقل الفاتورة عن 50 ريال.</b></p>
+    <label>الاسم</label><input id="rName" placeholder="اسمك الكريم">
+    <label>رقم الجوال</label><input id="rPhone" inputmode="tel" placeholder="05xxxxxxxx" dir="ltr">
+    <label>مبلغ الفاتورة (ريال)</label><input id="rAmt" type="number" inputmode="decimal" min="50" placeholder="50 أو أكثر" dir="ltr">
+    <label>صورة الفاتورة</label><input id="rImg" type="file" accept="image/*">
+    <img id="rPrev" alt="معاينة الفاتورة" style="display:none;width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px dashed #ff8c1a;margin-bottom:.8rem">
+    <button class="btn-glow" style="width:100%" id="rGo">تأكيد وإرسال عبر واتساب 💬</button>
+    <p id="rMsg" class="note" style="margin-top:.8rem;color:#ffd23f;font-weight:800"></p>
+  </div>
+  <style>
+.gcv{width:100%;max-width:320px;display:block;margin:0 auto;border-radius:16px;border:2px solid #ff8c1a;touch-action:none;background:#2a0d08;box-shadow:0 0 25px rgba(255,140,26,.35)}
+#sPad{display:grid;grid-template-columns:repeat(3,56px);gap:6px;justify-content:center;margin-top:.7rem}
+#sPad button{height:48px;border:0;border-radius:12px;background:linear-gradient(135deg,#e8321e,#ff8c1a);color:#fff;font-size:1.3rem;cursor:pointer}
+#sPad button:active{transform:scale(.9)}
+</style>
+  <div class="sd-panel" id="pGame">
+    <button class="sd-back" data-go="home">→ رجوع</button>
+    <h3 style="color:#ffd23f;margin-bottom:.8rem">🎮 اختر لعبتك</h3>
+    <button class="sd-opt" data-go="snake"><span class="ic">🐍</span><span>ثعبان الشاورما<small>كُل وكبّر ثعبانك</small></span></button>
+    <button class="sd-opt" data-go="tap"><span class="ic">👆</span><span>اضغط الشاورما والبرجر<small>3 قلوب… والسرعة تزيد كل مرة!</small></span></button>
+    <button class="sd-opt" data-go="car"><span class="ic">🚗</span><span>تجاوز السيارات<small>تجاوز أكبر عدد من السيارات والسرعة تزيد!</small></span></button>
+  </div>
+  <div class="sd-panel" id="pSnake">
+    <button class="sd-back" data-go="game">→ رجوع</button>
+    <div class="g-hud"><span>النقاط: <b id="sS">0</b></span><span>الأفضل: <b id="sB">0</b></span></div>
+    <canvas id="sCv" class="gcv" width="320" height="320"></canvas>
+    <div id="sPad" dir="ltr"><span></span><button data-d="0,-1">▲</button><span></span><button data-d="-1,0">◀</button><button data-d="0,1">▼</button><button data-d="1,0">▶</button></div>
+    <p class="note" style="text-align:center;margin-top:.6rem">اسحب بإصبعك أو استخدم الأسهم، وكُل البرجر 🍔 المضيء لتكبر. لا تلمس ذيلك!</p>
+  </div>
+  <div class="sd-panel" id="pTap">
+    <button class="sd-back" data-go="game">→ رجوع</button>
+    <div class="g-hud"><span>النقاط: <b id="tS">0</b></span><span>الأفضل: <b id="tB">0</b></span><span id="tL">❤️❤️❤️</span></div>
+    <canvas id="tCv" class="gcv" width="320" height="420"></canvas>
+    <p class="note" style="text-align:center;margin-top:.6rem">اضغط على الشاورما 🌯 والبرجر 🍔 قبل ما ينزلون. كل ضغطة تزيد السرعة، وأي واحدة توصل الأسفل تخسّرك قلب!</p>
+  </div>
+<style>
+#cPad{display:flex;gap:14px;justify-content:center;margin-top:.7rem}
+#cPad button{width:120px;height:52px;border:0;border-radius:14px;background:linear-gradient(135deg,#e8321e,#ff8c1a);color:#fff;font-size:1.5rem;cursor:pointer;touch-action:none}
+#cPad button:active{transform:scale(.94)}
+</style>
+  <div class="sd-panel" id="pCar">
+    <button class="sd-back" data-go="game">→ رجوع</button>
+    <div class="g-hud"><span>🚗 تجاوزت: <b id="cS">0</b></span><span>⚡ <b id="cK">60</b> كم/س</span><span>🏆 <b id="cB">0</b></span></div>
+    <canvas id="cCv" class="gcv" width="320" height="440"></canvas>
+    <div id="cPad" dir="ltr"><button id="cL" aria-label="يسار">◀</button><button id="cR" aria-label="يمين">▶</button></div>
+    <p class="note" style="text-align:center;margin-top:.6rem">حرّك سيارتك يمين ويسار فقط (بالسحب أو الأزرار أو الأسهم) وتجاوز السيارات بدون تصادم. السرعة تزيد مع الوقت وتقفز كل دقيقة!</p>
+  </div>
+</aside>
+<script>
+(function(){
+  const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+  const nav=$('nav'),btn=document.createElement('button');btn.id='menuBtn';btn.innerHTML='☰';btn.setAttribute('aria-label','القائمة');nav.appendChild(btn);
+  const dr=$('#sideDrawer'),ov=$('#sideOv');
+  function show(id){$('#sdHome').style.display=id==='home'?'block':'none';$$('.sd-panel').forEach(p=>p.classList.remove('show'));
+    const P={raffle:'pRaffle',game:'pGame',snake:'pSnake',tap:'pTap',car:'pCar'}[id];P&&$('#'+P).classList.add('show');
+    game.stop();if(id==='snake')snake.start();if(id==='tap')tap.start();if(id==='car')car.start()}
+  function open(){dr.classList.add('open');ov.classList.add('open');show('home')}
+  function close(){dr.classList.remove('open');ov.classList.remove('open');game.stop()}
+  btn.onclick=open;ov.onclick=close;$('#sdClose').onclick=close;
+  $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+  // السحب
+  let rFile=null;
+  $('#rImg').onchange=e=>{rFile=e.target.files[0]||null;const pv=$('#rPrev');if(rFile){pv.src=URL.createObjectURL(rFile);pv.style.display='block'}else pv.style.display='none'};
+  $('#rGo').onclick=async()=>{const n=$('#rName').value.trim(),p=$('#rPhone').value.replace(/\D/g,''),amt=parseFloat($('#rAmt').value),m=$('#rMsg');
+    if(n.length<2)return m.textContent='⚠️ اكتب اسمك';
+    if(p.length<9)return m.textContent='⚠️ اكتب رقم جوال صحيح';
+    if(!(amt>=50))return m.textContent='⚠️ يجب ألا تقل الفاتورة عن 50 ريال';
+    if(!rFile)return m.textContent='⚠️ ارفق صورة الفاتورة';
+    const to=BRANCH_DATA.phone;
+    const text='🎪 *تسجيل الدخول في سحب المهرجان*\n\n👤 الاسم: '+n+'\n📞 الجوال: '+p+'\n🧾 مبلغ الفاتورة: '+amt+' ريال\n📎 صورة الفاتورة: مرفقة في المحادثة';
+    window.open('https://wa.me/'+to+'?text='+encodeURIComponent(text),'_blank');
+    m.textContent='✅ فتحنا واتساب على رقم المحل ببياناتك. اضغط 📎 وأرفق صورة الفاتورة ثم اضغط إرسال لتكتمل مشاركتك.'};
+  // الألعاب
+  const ls=(k,v)=>{try{if(v!==undefined)localStorage.setItem(k,v);return localStorage.getItem(k)}catch(e){return null}};
+  const rnd=n=>Math.floor(Math.random()*n);
+  const snake=(()=>{
+    const cv=$('#sCv'),c=cv.getContext('2d'),N=16,S=20;
+    let sn,dir,nd,food,sc,best=+ls('sBest')||0,tm,over,run=false,sx=null,sy=0,raf=0;
+    function hud(){$('#sS').textContent=sc;$('#sB').textContent=best}
+    function place(){do{food={x:rnd(N),y:rnd(N),k:'🍔'}}while(sn.some(p=>p.x===food.x&&p.y===food.y))}
+    function anim(){if(!run)return;draw();raf=requestAnimationFrame(anim)}
+    function reset(){sn=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];dir=nd={x:1,y:0};sc=0;over=false;place();hud();clearTimeout(tm);step()}
+    function turn(x,y){if(x===-dir.x&&y===-dir.y)return;nd={x:x,y:y}}
+    function step(){if(!run)return;
+      if(!over){dir=nd;const h={x:(sn[0].x+dir.x+N)%N,y:(sn[0].y+dir.y+N)%N};
+        if(sn.some(p=>p.x===h.x&&p.y===h.y)){over=true;navigator.vibrate&&navigator.vibrate(100)}
+        else{sn.unshift(h);if(h.x===food.x&&h.y===food.y){sc++;if(sc>best){best=sc;ls('sBest',best)}hud();place()}else sn.pop()}}
+      draw();if(!over)tm=setTimeout(step,Math.max(65,150-sc*4))}
+    function draw(){
+      c.fillStyle='#2a0d08';c.fillRect(0,0,320,320);
+      c.fillStyle='rgba(255,140,26,.07)';for(let i=0;i<N;i++)for(let j=0;j<N;j++)if((i+j)%2)c.fillRect(i*S,j*S,S,S);
+      const pu=(Math.sin(Date.now()/140)+1)/2,fx=food.x*S+S/2,fy=food.y*S+S/2;
+      c.fillStyle='rgba(255,210,63,'+(.28+pu*.35)+')';c.beginPath();c.arc(fx,fy,S*.72+pu*4,0,7);c.fill();
+      c.strokeStyle='#ffd23f';c.lineWidth=2.5;c.beginPath();c.arc(fx,fy,S*.6,0,7);c.stroke();
+      c.textAlign='center';c.textBaseline='middle';c.font='20px serif';c.fillText('🍔',fx,fy+1);
+      sn.forEach((p,i)=>{c.fillStyle=i?'hsl('+(32-i)+',95%,'+(56-Math.min(i,18))+'%)':'#ffd23f';c.beginPath();
+        if(c.roundRect)c.roundRect(p.x*S+1,p.y*S+1,S-2,S-2,6);else c.rect(p.x*S+1,p.y*S+1,S-2,S-2);c.fill()});
+      const h=sn[0];c.fillStyle='#2a0d08';[-4,4].forEach(o=>{c.beginPath();c.arc(h.x*S+S/2+o,h.y*S+S/2-3,2,0,7);c.fill()});
+      if(over){c.fillStyle='rgba(0,0,0,.65)';c.fillRect(0,0,320,320);c.fillStyle='#ffd23f';c.font='bold 28px Cairo';c.fillText('انتهت اللعبة 🔥',160,120);
+        c.fillStyle='#fff';c.font='20px Cairo';c.fillText('نقاطك: '+sc,160,160);c.fillText('اضغط للعب مرة أخرى',160,200)}}
+    cv.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;if(over)reset()});
+    cv.addEventListener('pointerup',e=>{if(sx===null)return;const dx=e.clientX-sx,dy=e.clientY-sy;sx=null;
+      if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;Math.abs(dx)>Math.abs(dy)?turn(dx>0?1:-1,0):turn(0,dy>0?1:-1)});
+    $$('#sPad button').forEach(b=>b.addEventListener('pointerdown',()=>{const m=b.dataset.d.split(',');turn(+m[0],+m[1])}));
+    addEventListener('keydown',e=>{if(!run)return;const m={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(m){e.preventDefault();turn(m[0],m[1])}});
+    return{start(){if(run)return;run=true;reset();anim()},stop(){run=false;clearTimeout(tm);cancelAnimationFrame(raf)}}})();
+  const tap=(()=>{
+    const cv=$('#tCv'),c=cv.getContext('2d'),W=320,H=420;
+    let items,fx,sc,lives,sp,t,over,run=false,raf=0,best=+ls('tBest')||0;
+    function hud(){$('#tS').textContent=sc;$('#tB').textContent=best;$('#tL').textContent='❤️'.repeat(Math.max(lives,0))||'💔'}
+    function reset(){items=[];fx=[];sc=0;lives=3;sp=1.8;t=0;over=false;hud()}
+    cv.addEventListener('pointerdown',e=>{if(over){reset();return}
+      const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
+      let hit=-1,bd=1e9;items.forEach((i,k)=>{const d=Math.hypot(i.x-x,i.y-y);if(d<38&&d<bd){bd=d;hit=k}});
+      if(hit>=0){const i=items.splice(hit,1)[0];sc++;sp=Math.min(9,sp+.12);if(sc>best){best=sc;ls('tBest',best)}fx.push({x:i.x,y:i.y,a:1});hud()}});
+    function loop(){if(!run)return;raf=requestAnimationFrame(loop);
+      const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#4a1409');g.addColorStop(1,'#1c0907');c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.fillStyle='rgba(232,50,30,.35)';c.fillRect(0,H-6,W,6);c.textAlign='center';c.textBaseline='middle';
+      if(!over){t++;if(t%Math.max(22,66-Math.floor(sp*6))===0)items.push({x:30+Math.random()*(W-60),y:-24,k:Math.random()<.5?'🌯':'🍔'});
+        items.forEach(i=>{i.y+=sp});
+        items=items.filter(i=>{if(i.y>H-8){lives--;navigator.vibrate&&navigator.vibrate(80);hud();if(lives<=0)over=true;return false}return true})}
+      c.font='38px serif';items.forEach(i=>c.fillText(i.k,i.x,i.y));
+      c.font='bold 18px Cairo';fx=fx.filter(f=>f.a>0);fx.forEach(f=>{f.y-=1.2;f.a-=.04;c.fillStyle='rgba(255,210,63,'+f.a+')';c.fillText('+1',f.x,f.y)});
+      if(over){c.fillStyle='rgba(0,0,0,.65)';c.fillRect(0,0,W,H);c.fillStyle='#ffd23f';c.font='bold 28px Cairo';c.fillText('خسرت 💔',W/2,170);
+        c.fillStyle='#fff';c.font='20px Cairo';c.fillText('نقاطك: '+sc,W/2,212);c.fillText('اضغط للعب مرة أخرى',W/2,255)}}
+    return{start(){if(run)return;run=true;reset();loop()},stop(){run=false;cancelAnimationFrame(raf)}}})();
+  const car=(()=>{
+    const cv=$('#cCv'),c=cv.getContext('2d'),W=320,H=440,RL=40,RW=240,CW=34,CH=60,PY=H-95,cols=['#2f80ed','#27ae60','#9b59b6','#f2f2f2','#00bcd4','#ff7ab2'];
+    let px,tgt,cars,sc,t0,last,run=false,raf=0,over,dist,gap,lvl,banner,sp,dash,best=+ls('cBest')||0,kL=0,kR=0,bL=0,bR=0,lastK=0;
+    const clamp=x=>Math.max(RL+CW/2+3,Math.min(RL+RW-CW/2-3,x));
+    function hud(){$('#cS').textContent=sc;$('#cB').textContent=best}
+    function reset(){px=tgt=W/2;cars=[];sc=0;over=false;dist=0;gap=220;lvl=0;banner=0;sp=3.2;dash=0;t0=last=performance.now();hud()}
+    function rr(x,y,w,h,r){c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r);else c.rect(x,y,w,h);c.fill()}
+    function drawCar(x,y,col,me){c.save();c.translate(x,y);
+      c.fillStyle='rgba(0,0,0,.35)';rr(-CW/2+3,-CH/2+5,CW,CH,8);
+      c.fillStyle='#111';[[-CW/2-3,-CH/2+8],[CW/2-2,-CH/2+8],[-CW/2-3,CH/2-22],[CW/2-2,CH/2-22]].forEach(w=>c.fillRect(w[0],w[1],5,14));
+      c.fillStyle=col;rr(-CW/2,-CH/2,CW,CH,9);
+      if(me){c.fillStyle='#ffd23f';c.fillRect(-3,-CH/2,6,CH)}
+      c.fillStyle='rgba(190,225,255,.9)';rr(-CW/2+5,-CH/2+15,CW-10,12,3);rr(-CW/2+6,CH/2-20,CW-12,9,3);
+      c.fillStyle='rgba(0,0,0,.25)';c.fillRect(-CW/2+6,-CH/2+28,CW-12,12);
+      c.fillStyle='#fff7b0';c.fillRect(-CW/2+3,-CH/2+1,8,5);c.fillRect(CW/2-11,-CH/2+1,8,5);
+      c.fillStyle='#ff2b2b';c.fillRect(-CW/2+3,CH/2-5,8,4);c.fillRect(CW/2-11,CH/2-5,8,4);c.restore()}
+    function draw(){
+      c.fillStyle='#2a0d08';c.fillRect(0,0,W,H);
+      c.fillStyle='#34302f';c.fillRect(RL,0,RW,H);
+      c.fillStyle='#ffd23f';c.fillRect(RL-4,0,4,H);c.fillRect(RL+RW,0,4,H);
+      for(let y=-40+dash;y<H;y+=40){c.fillStyle='rgba(255,255,255,.75)';c.fillRect(RL+RW/3-2,y,4,22);c.fillRect(RL+2*RW/3-2,y,4,22);
+        c.fillStyle=(Math.round((y-dash)/40)%2)?'#e8321e':'#fff';c.fillRect(2,y,RL-8,20);c.fillRect(RL+RW+8,y,RL-10,20)}
+      cars.forEach(o=>drawCar(o.x,o.y,o.col,false));drawCar(px,PY,'#e8321e',true);
+      c.textAlign='center';c.textBaseline='middle';
+      if(banner>0){c.fillStyle='rgba(0,0,0,.6)';c.fillRect(30,60,260,44);c.fillStyle='#ffd23f';c.font='bold 20px Cairo';c.fillText('⚡ زادت السرعة! المستوى '+(lvl+1),160,83)}
+      if(over){c.fillStyle='rgba(0,0,0,.7)';c.fillRect(0,0,W,H);c.fillStyle='#ffd23f';c.font='bold 30px Cairo';c.fillText('تصادم! 💥',160,170);
+        c.fillStyle='#fff';c.font='20px Cairo';c.fillText('تجاوزت '+sc+' سيارة',160,214);c.fillText('اضغط للعب مرة أخرى',160,258)}}
+    function loop(now){if(!run)return;raf=requestAnimationFrame(loop);
+      const dt=Math.min(3,(now-last)/16.67);last=now;
+      if(!over){
+        const el=(now-t0)/1000,L=Math.floor(el/60);if(L>lvl){lvl=L;banner=150}
+        sp=Math.min(16,3.2+el*.035+lvl*.8);const rv=sp*.7;
+        const mv=(kR||bR)-(kL||bL);if(mv)tgt=px+mv*40;tgt=clamp(tgt);
+        px=clamp(px+Math.max(-8*dt,Math.min(8*dt,tgt-px)));
+        dash=(dash+sp*dt)%40;dist+=rv*dt;
+        if(dist>gap){dist=0;gap=150+rv*12+Math.random()*90;const lane=Math.floor(Math.random()*3);
+          cars.push({x:RL+RW/6+lane*RW/3+(Math.random()*14-7),y:-CH,col:cols[Math.floor(Math.random()*cols.length)],p:false})}
+        cars.forEach(o=>{o.y+=rv*dt;
+          if(!over&&Math.abs(o.x-px)<CW-6&&Math.abs(o.y-PY)<CH-8){over=true;navigator.vibrate&&navigator.vibrate(200);if(sc>best){best=sc;ls('cBest',best)}hud()}
+          if(!o.p&&o.y>PY+CH){o.p=true;sc++;if(sc>best){best=sc;ls('cBest',best)}hud()}});
+        cars=cars.filter(o=>o.y<H+CH);if(banner>0)banner-=dt;
+        const k=Math.round(60+sp*14);if(k!==lastK){lastK=k;$('#cK').textContent=k}}
+      draw()}
+    const setX=e=>{const r=cv.getBoundingClientRect();tgt=clamp((e.clientX-r.left)/r.width*W)};
+    cv.addEventListener('pointerdown',e=>{if(over){reset();return}setX(e)});
+    cv.addEventListener('pointermove',e=>{if(!over&&(e.pointerType!=='mouse'||e.buttons))setX(e)});
+    const hold=(id,fn)=>{const b=$(id);b.addEventListener('pointerdown',e=>{e.preventDefault();fn(1)});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>{fn(0);tgt=px}))};
+    hold('#cL',v=>bL=v);hold('#cR',v=>bR=v);
+    addEventListener('keydown',e=>{if(!run)return;if(e.key==='ArrowLeft'){e.preventDefault();kL=1}if(e.key==='ArrowRight'){e.preventDefault();kR=1}});
+    addEventListener('keyup',e=>{if(e.key==='ArrowLeft')kL=0;if(e.key==='ArrowRight')kR=0;tgt=px});
+    return{start(){if(run)return;run=true;reset();raf=requestAnimationFrame(loop)},stop(){run=false;cancelAnimationFrame(raf);kL=kR=bL=bR=0}}})();
+  const game={stop(){snake.stop();tap.stop();car.stop()}};
+})();
+</script>
+</body>
+</html>
