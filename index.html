@@ -98,6 +98,18 @@
       letter-spacing: 1px;
     }
 
+    .splash-family-offer {
+      margin-top: 0.9rem;
+      padding: 0.45rem 1.15rem;
+      border: 1px solid rgba(198, 40, 40, 0.38);
+      border-radius: 999px;
+      background: rgba(198, 40, 40, 0.045);
+      color: var(--primary);
+      font-size: 1.05rem;
+      font-weight: 900;
+      box-shadow: 0 0 14px rgba(198, 40, 40, 0.2), inset 0 0 8px rgba(198, 40, 40, 0.06);
+    }
+
     .splash-branch-label {
       font-size: 1.05rem;
       color: var(--text-light);
@@ -600,6 +612,7 @@
       </div>
       <div class="splash-logo-badge">شاورمايشن</div>
       <div class="splash-slogan">طعم .. مذاق .. لذاذه ✨</div>
+      <div class="splash-family-offer">🎁 عرض الأسرة بانتظارك</div>
       <div class="splash-branch-label">📍 فرع حلي (المثلث أمام مستوصف العلوي الطبي)</div>
       
       <div class="splash-loader-bar">
@@ -1801,9 +1814,13 @@
       if (!itemPricing) return;
 
       const isFries = itemId.includes('بطاطس');
+      const isSandwichItem = [...document.querySelectorAll('#sandwiches .card')]
+        .some(card => card.dataset.itemId === itemId);
       const singleCheeseExtra = (itemPricing.cheese ?? itemPricing.base) - itemPricing.base;
       const isCheeseChoice = type === 'cheese' || type === 'doubleCheese';
-      const cheeseExtra = type === 'doubleCheese' ? singleCheeseExtra * 2 : singleCheeseExtra;
+      const cheeseExtra = type === 'doubleCheese'
+        ? isSandwichItem ? itemPricing.cheese + 2 - itemPricing.base : singleCheeseExtra * 2
+        : singleCheeseExtra;
       const cheeseChoice = isCheeseChoice
         ? `${type === 'doubleCheese' ? 'دبل جبن' : 'مع جبن'} (+${cheeseExtra} ر.ي)`
         : type === 'base' ? 'بدون جبن' : null;
@@ -2502,8 +2519,11 @@
           !cardItemId.includes('بطاطس') &&
           itemPricing?.base !== undefined &&
           itemPricing?.cheese !== undefined;
+        const isSandwichCard = Boolean(card.closest('#sandwiches')) &&
+          itemPricing?.base !== undefined &&
+          itemPricing?.cheese !== undefined;
 
-        if (hasCheeseChoices && supportsDoubleCheese && footer && !footer.querySelector('.btn-double-cheese')) {
+        if (hasCheeseChoices && (supportsDoubleCheese || isSandwichCard) && footer && !footer.querySelector('.btn-double-cheese')) {
           const doubleCheeseButton = document.createElement('button');
           doubleCheeseButton.type = 'button';
           doubleCheeseButton.className = 'btn-add btn-double-cheese';
@@ -2533,7 +2553,9 @@
               price = choice === 'cheese' ? itemPricing.cheese : itemPricing.base;
             } else if (button.classList.contains('btn-double-cheese') && itemPricing) {
               label = 'دبل جبن';
-              price = itemPricing.base + (itemPricing.cheese - itemPricing.base) * 2;
+              price = isSandwichCard
+                ? itemPricing.cheese + 2
+                : itemPricing.base + (itemPricing.cheese - itemPricing.base) * 2;
             } else {
               const prepMatch = action.match(/openItemWithPrep\('[^']+',\s*([\d.]+),\s*'([^']+)'\)/);
               if (prepMatch) {
