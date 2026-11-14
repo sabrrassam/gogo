@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شاورمايشن القوز | خيارك الصح .. في الوقت الصح</title>
+  <title>شاورمايشن حلي | خيارك الصح .. في الوقت الصح</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -194,20 +194,21 @@
 
     .top-offer-strip {
       position: relative;
-      display: block;
+      display: flex;
       flex: 0 0 auto;
       min-width: 0;
       width: 100%;
       max-width: none;
       overflow: hidden;
-      padding: 0.45rem 0;
+      align-items: center;
+      padding: 0.45rem 0.7rem;
       border: 1px solid rgba(198, 40, 40, 0.55);
       border-radius: 999px;
       background: rgba(200, 155, 60, 0.12);
       color: #c62828;
       font-size: 0.86rem;
       font-weight: 800;
-      direction: ltr;
+      direction: rtl;
       box-shadow: 0 0 12px rgba(198, 40, 40, 0.18);
     }
 
@@ -232,6 +233,16 @@
       animation: offerTicker 18s linear infinite;
     }
 
+    .top-offer-label {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 auto;
+      padding: 0 0.55rem;
+      border-left: 1px solid rgba(198, 40, 40, 0.25);
+      white-space: nowrap;
+    }
+
+    .top-offer-marquee { flex: 1 1 auto; min-width: 0; overflow: hidden; direction: ltr; }
     .top-offer-strip:hover .top-offer-track { animation-play-state: paused; }
     .top-offer-message { flex: 0 0 auto; padding: 0 1.25rem; white-space: nowrap; }
     .top-offer-strip .top-offer-message,
@@ -297,7 +308,7 @@
       .top-offer-strip::before, .section-dock { animation: none; }
     }
 
-    .menu-section { padding: 4.5rem 1.2rem; position: relative; scroll-margin-top: 198px; }
+    .menu-section { padding: 4.5rem 1.2rem; position: relative; scroll-margin-top: 86px; }
     .section-container { position: relative; z-index: 2; max-width: 1350px; margin: auto; }
     .section-header { text-align: center; margin-bottom: 2.2rem; }
     .section-header h2 { font-size: 2.3rem; color: var(--primary); font-weight: 900; margin-bottom: 0.4rem; }
@@ -331,11 +342,6 @@
     #drinks .btn-add.added { background: var(--secondary); color: var(--primary); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.2); transform: scale(1.04); }
     .card-footer.card-choices { flex-direction: column; align-items: stretch; gap: 7px; }
     .card-choices .choice-chip { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; width: 100%; min-width: 0; min-height: 40px; padding: 0.55rem 0.8rem; border-radius: 12px; text-align: right; line-height: 1.35; }
-    #meals .card[data-item-id^="تشيكن فرايز"] .card-content { justify-content: flex-start; }
-    #meals .card[data-item-id^="تشيكن فرايز"] .item-desc { margin-bottom: 0.35rem; }
-    #meals .card[data-item-id^="تشيكن فرايز"] .card-footer { padding-top: 0.45rem; }
-    #meals .card[data-item-id^="تشيكن فرايز"] .card-footer.card-choices { gap: 4px; }
-    #meals .card[data-item-id^="تشيكن فرايز"] .card-choices .choice-chip { min-height: 36px; padding: 0.45rem 0.7rem; }
     .choice-price { direction: ltr; white-space: nowrap; color: var(--secondary); font-weight: 900; }
     .card-prep-group { width: 100%; margin: 0 0 0.35rem; padding: 0; border: 0; }
     .card-prep-title, .card-cheese-title { display: block; margin-bottom: 0.35rem; color: var(--primary); font-size: 0.78rem; font-weight: 900; }
@@ -489,11 +495,10 @@
 
     .section-dock {
       position: fixed;
-      top: auto;
+      top: 105px;
       z-index: 1050;
       left: 50%;
       display: block;
-      top: 106px;
       bottom: auto;
       transform: translateX(-50%);
       width: min(500px, calc(100% - 24px));
@@ -575,7 +580,8 @@
       .brand-box { gap: 7px; }
       .logo-badge { padding: 5px 9px; font-size: 1rem; }
       .slogan-nav { font-size: 0.72rem; }
-      .top-offer-strip { padding: 0.32rem 0; font-size: 0.68rem; }
+      .top-offer-strip { padding: 0.32rem 0.35rem; font-size: 0.68rem; }
+      .top-offer-label { padding: 0 0.4rem; }
       .top-offer-message { padding: 0 0.9rem; }
       .top-offer-icon { font-size: 0.85rem; }
       .video-hero-wrapper { padding: 12rem 1rem 2rem; }
@@ -633,10 +639,10 @@
       <div class="splash-logo-ring">
         <span style="font-size: 2.4rem;">🌯</span>
       </div>
-      <div class="splash-logo-badge">شاورمايشن القوز</div>
+      <div class="splash-logo-badge">شاورمايشن حلي</div>
       <div class="splash-slogan">طعم .. مذاق .. لذاذه ✨</div>
       <div class="splash-family-offer">🎁 عرض الأسرة بانتظارك</div>
-      <div class="splash-branch-label">📍 فرع القوز (مجمع فواصل)</div>
+      <div class="splash-branch-label">📍 حلي - المثلث - مستوصف العلوي الطبي</div>
       
       <div class="splash-loader-bar">
         <div class="splash-loader-progress"></div>
@@ -660,10 +666,15 @@
       <div class="logo-badge">شاورمايشن</div>
       <span class="slogan-nav" id="navBranchIndicator">فرع حلي</span>
     </div>
-    <div class="top-offer-strip" role="note" aria-label="عرض الأسرة">
-      <div class="top-offer-track">
-        <span class="top-offer-message"><span class="top-offer-icon" aria-hidden="true">✦</span> عرض الأسرة: اطلب <strong>3</strong> من أي صنف والرابع علينا</span>
-        <span class="top-offer-message" aria-hidden="true"><span class="top-offer-icon">✦</span> عرض الأسرة: اطلب <strong>3</strong> من أي صنف والرابع علينا</span>
+    <div class="top-offer-strip" role="note" aria-label="العروض">
+      <span class="top-offer-label">عروض</span>
+      <div class="top-offer-marquee">
+        <div class="top-offer-track">
+          <span class="top-offer-message"><span class="top-offer-icon" aria-hidden="true">✦</span> عرض الأسرة: اطلب <strong>3</strong> من أي صنف والرابع علينا</span>
+          <span class="top-offer-message"><span class="top-offer-icon" aria-hidden="true">✦</span> التوصيل مجاني إلى مهرجان حلي</span>
+          <span class="top-offer-message" aria-hidden="true"><span class="top-offer-icon">✦</span> عرض الأسرة: اطلب <strong>3</strong> من أي صنف والرابع علينا</span>
+          <span class="top-offer-message" aria-hidden="true"><span class="top-offer-icon">✦</span> التوصيل مجاني إلى مهرجان حلي</span>
+        </div>
       </div>
     </div>
   </nav>
@@ -677,8 +688,8 @@
 
     <div class="hero-content">
       <span class="tagline" id="heroTagline">خيارك الصح .. في الوقت الصح ✨</span>
-      <h1><span>شاورمايشن</span> القوز</h1>
-      <p class="hero-sub" id="heroSubText">قائمة فرع القوز الكاملة لأشهى صحون وسندوتشات الشاورما، البرجر، التورتيلا والوجبات</p>
+      <h1><span>شاورمايشن</span> حلي</h1>
+      <p class="hero-sub" id="heroSubText">قائمة فرع حلي الكاملة لأشهى صحون وسندوتشات الشاورما، البرجر، التورتيلا والوجبات</p>
 
     </div>
   </section>
@@ -729,6 +740,25 @@
               <div class="card-footer">
                 <button class="btn-add btn-action-base" onclick="openItemByName('صحن عربي وسط', 'base')">+ بدون جبن (16)</button>
                 <button class="btn-add btn-action-cheese" onclick="openItemByName('صحن عربي وسط', 'cheese')">+ جبنة (18)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- صحن عربي صغير -->
+          <div class="card" data-item-id="صحن عربي صغير">
+            <div class="card-img-wrapper"><img src="img/صحن عربي صغير.jpeg" alt="صحن عربي صغير" onerror="this.onerror=null; this.src='img/صحن شوارما صغير.jpeg';"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">صحن عربي صغير</span>
+                <div class="prices-badge-group">
+                  <span class="price-tag price-display-base">13 ر.ي</span>
+                  <span class="price-sub price-display-sub">جبن: 15 ر.ي</span>
+                </div>
+              </div>
+              <p class="item-desc">صحن شاورما فردي سريع وغني بالنكهات والصلصة الخاصة.</p>
+              <div class="card-footer">
+                <button class="btn-add btn-action-base" onclick="openItemByName('صحن عربي صغير', 'base')">+ بدون جبن (13)</button>
+                <button class="btn-add btn-action-cheese" onclick="openItemByName('صحن عربي صغير', 'cheese')">+ جبنة (15)</button>
               </div>
             </div>
           </div>
@@ -1100,24 +1130,34 @@
           </div>
 
           <!-- تورتيلا زنجر كبير -->
-          <!-- Qouz tortilla option -->
-<div class="card" data-item-id="تورتيلا زنجر">
-            <div class="card-img-wrapper"><img src="img/تورتلا زنجر كبير.jpeg" alt="تورتيلا زنجر"></div>
+          <div class="card" data-item-id="تورتيلا زنجر كبير">
+            <div class="card-img-wrapper"><img src="img/تورتلا زنجر كبير.jpeg" alt="تورتيلا زنجر كبير"></div>
             <div class="card-content">
               <div class="card-top">
-                <span class="item-title">تورتيلا زنجر</span>
-                <span class="price-tag">10 ر.ي</span>
+                <span class="item-title">تورتيلا زنجر كبير</span>
+                <span class="price-tag">11 ر.ي</span>
               </div>
               <p class="item-desc">قطع الزنجر المقرمشة الحارة ملفوفة بعناية في خبز التورتيلا اللذيذ.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openItemWithPrep('تورتيلا زنجر', 10, 'مقلي 🍗')">+ إضافة للطلب (10 ر.ي)</button>
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا زنجر كبير', 11, 'مقلي 🍗')">+ إضافة للطلب (11 ر.ي)</button>
               </div>
             </div>
           </div>
 
-
           <!-- تورتيلا زنجر برجر صغير -->
-          
+          <div class="card" data-item-id="تورتيلا زنجر برجر صغير">
+            <div class="card-img-wrapper"><img src="img/تورتيلا زنجر صغير.jpeg" alt="تورتيلا زنجر برجر صغير"></div>
+            <div class="card-content">
+              <div class="card-top">
+                <span class="item-title">تورتيلا زنجر برجر صغير</span>
+                <span class="price-tag">8 ر.ي</span>
+              </div>
+              <p class="item-desc">ساندوتش تورتيلا خفيف ومقرمش بقطع زنجر متبلة وغنية بالصوص.</p>
+              <div class="card-footer">
+                <button class="btn-add" onclick="openItemWithPrep('تورتيلا زنجر برجر صغير', 8, 'مقلي 🍗')">+ إضافة للطلب (8 ر.ي)</button>
+              </div>
+            </div>
+          </div>
 
           <!-- سندوتش مسحب دجاج كبير -->
           <div class="card" data-item-id="سندوتش مسحب دجاج كبير">
@@ -1174,13 +1214,13 @@
                 <span class="item-title">صحن بطاطس صغير</span>
                 <div class="prices-badge-group">
                   <span class="price-tag">صافي: 3 ر.ي</span>
-                  <span class="price-sub">جبن: 6 ر.ي</span>
+                  <span class="price-sub">جبن: 5 ر.ي</span>
                 </div>
               </div>
               <p class="item-desc">أصابع بطاطس مقلية ذهبية مقرمشة ولذيذة.</p>
               <div class="card-footer">
                 <button class="btn-add" onclick="openItemByName('صحن بطاطس صغير', 'base')">+ صافي (3)</button>
-                <button class="btn-add" onclick="openItemByName('صحن بطاطس صغير', 'cheese')">+ مع جبن (6)</button>
+                <button class="btn-add" onclick="openItemByName('صحن بطاطس صغير', 'cheese')">+ مع جبن (5)</button>
               </div>
             </div>
           </div>
@@ -1226,12 +1266,12 @@
             <div class="card-content">
               <div class="card-top">
                 <span class="item-title">وجبة برجر دجاج متكاملة</span>
-                <span class="price-tag">15 ر.ي</span>
+                <span class="price-tag">14 ر.ي</span>
               </div>
               <p class="item-desc">تتكون الوجبة من: بطاطس مقرمشة مع برجر دجاج مع مشروب غازي.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 15, 'مشوي 🔥')">+ مشوي 🔥 (15)</button>
-                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 15, 'مقلي 🍗')">+ مقلي 🍗 (15)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 14, 'مشوي 🔥')">+ مشوي 🔥 (14)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة برجر دجاج متكاملة', 14, 'مقلي 🍗')">+ مقلي 🍗 (14)</button>
               </div>
             </div>
           </div>
@@ -1242,12 +1282,12 @@
             <div class="card-content">
               <div class="card-top">
                 <span class="item-title">وجبة توست دجاج متكاملة</span>
-                <span class="price-tag">14 ر.ي</span>
+                <span class="price-tag">13 ر.ي</span>
               </div>
               <p class="item-desc">تتكون الوجبة من: توست دجاج محمص مع بطاطس ومشروب غازي.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 14, 'مشوي 🔥')">+ مشوي 🔥 (14)</button>
-                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 14, 'مقلي 🍗')">+ مقلي 🍗 (14)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 13, 'مشوي 🔥')">+ مشوي 🔥 (13)</button>
+                <button class="btn-add" onclick="openItemWithPrep('وجبة توست دجاج متكاملة', 13, 'مقلي 🍗')">+ مقلي 🍗 (13)</button>
               </div>
             </div>
           </div>
@@ -1258,11 +1298,11 @@
             <div class="card-content">
               <div class="card-top">
                 <span class="item-title">وجبة زنجر متكاملة</span>
-                <span class="price-tag">15 ر.ي</span>
+                <span class="price-tag price-display-single">15 ر.ي</span>
               </div>
               <p class="item-desc">تتكون الوجبة من: بطاطس مع برجر زنجر مقرمش ومشروب غازي بارد.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openItemWithPrep('وجبة زنجر متكاملة', 15, 'مقلي 🍗')">+ إضافة للطلب (15 ر.ي)</button>
+                <button class="btn-add btn-action-single" onclick="openItemByName('وجبة زنجر متكاملة', 'single')">+ إضافة (15)</button>
               </div>
             </div>
           </div>
@@ -1277,8 +1317,7 @@
               </div>
               <p class="item-desc">بطاطس مقلية مغطاة بقطع الدجاج والجبنة والصلصات الشهية.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز صغير', false)">+ إضافة (10 ر.ي)</button>
-                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز صغير', true)">+ زيادة جبن (12 ر.ي)</button>
+                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز صغير', 'single')">+ إضافة (10)</button>
               </div>
             </div>
           </div>
@@ -1293,8 +1332,7 @@
               </div>
               <p class="item-desc">صحن تشيكن فرايز كبير مشبع بالدجاج المقرمش والجبن الذائب.</p>
               <div class="card-footer">
-                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز كبير', false)">+ إضافة (15 ر.ي)</button>
-                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز كبير', true)">+ زيادة جبن (17 ر.ي)</button>
+                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز كبير', 'single')">+ إضافة (15)</button>
               </div>
             </div>
           </div>
@@ -1625,7 +1663,8 @@
         <label style="font-weight: 800; color: var(--accent);">🚚 اختر طريقة استلام الطلب:</label>
         <div class="select-wrapper" style="margin-top: 5px;">
             <select id="deliverySelect" onchange="toggleDeliveryOptions()" class="input-field" style="font-weight: bold; background: rgba(15, 118, 110, 0.9);">
-                <option value="توصيل">توصيل للموقع (رسوم حسب إجمالي الطلب)</option>
+                <option value="توصيل">توصيل للموقع (رسوم حسب قيمة الطلب)</option>
+                <option value="توصيل إلى المهرجان">توصيل إلى مهرجان حلي (مجاني)</option>
                 <option value="استلام سيارة">استلام من مواقف المطعم (سيارة)</option>
                 <option value="من المحل">استلام شخصي من المحل</option>
                 <option value="إضافة على الطلب السابق">إضافة على الطلب السابق</option>
@@ -1644,6 +1683,7 @@
               📍 ملاحظة: سيُطلب منك إرسال موقعك عبر خرائط جوجل (Google Maps) في الواتساب لتسهيل التوصيل السريع.
            </p>
            <p class="delivery-note" style="margin-top: 7px;">🛵 يعتمد وقت وصول الطلب على توفر السائق وانشغاله بطلبات أخرى. شكرًا لتفهّمكم.</p>
+           <p id="deliveryFeeNote" class="delivery-note" style="margin-top: 7px;">🚚 رسوم التوصيل ثابتة: 10 ر.ي.</p>
         </div>
 
         <div id="carField" style="display: none;">
@@ -1656,10 +1696,19 @@
            <input type="text" id="storeName" class="input-field" placeholder="اسم المستلم">
            <input type="tel" id="storePhone" class="input-field" placeholder="رقم الجوال للتواصل">
         </div>
+
+        <div id="festivalField" style="display: none;">
+           <label style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">🎪 بيانات المستلم في مهرجان حلي:</label>
+           <input type="text" id="festivalCustomerName" class="input-field" placeholder="اسم المستلم">
+           <input type="tel" id="festivalCustomerPhone" class="input-field" placeholder="رقم الجوال للتواصل">
+        </div>
       </div>
 
-      <div style="margin-top: 1.5rem; border-top: 1px dashed rgba(200, 155, 60, 0.4); padding-top: 1rem; font-weight: 900; font-size: 1.3rem; color: var(--accent); display:flex; justify-content:space-between; align-items:center;">
-        <span>الإجمالي المستحق: <span id="cartModalTotal">0.00</span> ر.ي</span>
+      <div style="margin-top: 1.5rem; border-top: 1px dashed rgba(200, 155, 60, 0.4); padding-top: 1rem; font-weight: 900; font-size: 1.3rem; color: var(--accent);">
+        <div id="deliveryFeeSummary" style="display:none; margin-bottom:0.45rem; font-size:0.9rem; color:var(--text-muted);"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>الإجمالي المستحق: <span id="cartModalTotal">0.00</span> ر.ي</span>
+        </div>
       </div>
 
       <button type="button" class="btn-modal-action" onclick="sendFullOrderToWhatsApp()">تأكيد وإرسال عبر واتساب 💬</button>
@@ -1671,41 +1720,43 @@
        قائمة أسعار فرع حلي المعتمدة رسمياً 100%
        ======================================================== */
     const BRANCH_DATA = {
-      navLabel: "فرع القوز",
-      footerLocation: "📍 فرع القوز (مجمع فواصل)",
-      phone: "966539583619",
-      displayPhone: "0539583619",
+      navLabel: "فرع حلي",
+      footerLocation: "📍 حلي - المثلث أمام مستوصف العلوي الطبي",
+      phone: "966500953327",
+      displayPhone: "0500953327",
       prices: {
-        "صحن عربي كبير": { base: 14, cheese: 16, labelBase: "14 ر.ي", labelCheese: "16 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "صحن عربي وسط": { base: 12, cheese: 14, labelBase: "12 ر.ي", labelCheese: "14 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "باشكا إيطالي": { base: 18, cheese: 20, labelBase: "18 ر.ي", labelCheese: "20 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "كلوب زنجر": { base: 18, cheese: 20, labelBase: "18 ر.ي", labelCheese: "20 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "كلوب شاورما": { base: 18, cheese: 20, labelBase: "18 ر.ي", labelCheese: "20 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "شاورما صاروخ": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "شاورما وسط": { base: 5, cheese: 6, labelBase: "5 ر.ي", labelCheese: "6 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "ساندوتش شاورمايشن": { base: 9, cheese: 10, labelBase: "9 ر.ي", labelCheese: "10 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "شاورما جامبو": { base: 8, cheese: 9, labelBase: "8 ر.ي", labelCheese: "9 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "توست شاورما": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "برجر شاورما": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "برجر دجاج": { base: 8, cheese: 9, labelBase: "8 ر.ي", labelCheese: "9 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "جانبو دجاج برجر": { base: 9, cheese: 10, labelBase: "9 ر.ي", labelCheese: "10 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "برجر دبل دجاج": { base: 14, cheese: 15, labelBase: "14 ر.ي", labelCheese: "15 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "برجر زنجر": { base: 8, cheese: 9, labelBase: "8 ر.ي", labelCheese: "9 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "برجر زنجر دبل": { base: 14, cheese: 15, labelBase: "14 ر.ي", labelCheese: "15 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "جانبو زنجر": { base: 9, cheese: 10, labelBase: "9 ر.ي", labelCheese: "10 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "توست دجاج برجر": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "تورتيلا دجاج برجر صغير": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "تورتيلا دجاج برجر كبير": { base: 10, cheese: 11, labelBase: "10 ر.ي", labelCheese: "11 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "تورتيلا زنجر": { base: 10, cheese: 11, labelBase: "10 ر.ي", labelCheese: "11 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "سندوتش مسحب دجاج كبير": { base: 9, cheese: 10, labelBase: "9 ر.ي", labelCheese: "10 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "سندوتش مسحب دجاج صغير": { base: 7, cheese: 8, labelBase: "7 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "صحن بطاطس صغير": { base: 3, cheese: 6, labelBase: "3 ر.ي", labelCheese: "6 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "صحن بطاطس كبير": { base: 5, cheese: 8, labelBase: "5 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "وجبة توست دجاج متكاملة": { base: 14, cheese: 15, labelBase: "14 ر.ي", labelCheese: "15 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "تشيكن فرايز صغير": { single: 10, cheese: 12, labelBase: "10 ر.ي" },
-        "تشيكن فرايز كبير": { single: 15, cheese: 17, labelBase: "15 ر.ي" },
-        "وجبة زنجر متكاملة": { single: 15, cheese: 16, labelBase: "15 ر.ي" },
-        "وجبة برجر دجاج متكاملة": { base: 15, cheese: 16, labelBase: "15 ر.ي", labelCheese: "16 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
+        "صحن عربي كبير": { base: 18, cheese: 20 },
+        "صحن عربي وسط": { base: 16, cheese: 18 },
+        "صحن عربي صغير": { base: 13, cheese: 15 },
+        "باشكا إيطالي": { base: 18, cheese: 20 },
+        "كلوب زنجر": { base: 18, cheese: 20 },
+        "كلوب شاورما": { base: 18, cheese: 20 },
+        "شاورما صاروخ": { base: 8, cheese: 9 },
+        "شاورما وسط": { base: 5, cheese: 6 },
+        "ساندوتش شاورمايشن": { base: 10, cheese: 11 },
+        "شاورما جامبو": { base: 9, cheese: 10 },
+        "توست شاورما": { base: 8, cheese: 9 },
+        "برجر شاورما": { base: 8, cheese: 9 },
+        "برجر دجاج": { base: 9, cheese: 10 },
+        "جانبو دجاج برجر": { base: 10, cheese: 11 },
+        "برجر دبل دجاج": { base: 14, cheese: 15 },
+        "برجر زنجر": { base: 9, cheese: 10 },
+        "برجر زنجر دبل": { base: 14, cheese: 15 },
+        "جانبو زنجر": { base: 10, cheese: 11 },
+        "توست دجاج برجر": { base: 8, cheese: 9 },
+        "تورتيلا دجاج برجر صغير": { base: 7, cheese: 8 },
+        "تورتيلا دجاج برجر كبير": { base: 11, cheese: 12 },
+        "تورتيلا زنجر كبير": { base: 11, cheese: 12 },
+        "تورتيلا زنجر برجر صغير": { base: 8, cheese: 9 },
+        "سندوتش مسحب دجاج كبير": { base: 10, cheese: 11 },
+        "سندوتش مسحب دجاج صغير": { base: 8, cheese: 9 },
+        "صحن بطاطس صغير": { base: 3, cheese: 5 },
+        "صحن بطاطس كبير": { base: 5, cheese: 8 },
+        "وجبة توست دجاج متكاملة": { base: 13 },
+        "تشيكن فرايز صغير": { single: 10 },
+        "تشيكن فرايز كبير": { single: 15 },
+        "وجبة زنجر متكاملة": { base: 15 },
+        "وجبة برجر دجاج متكاملة": { base: 14 },
         "إضافة: صوص ثوم": { single: 1 },
         "إضافة: صوص كوكتيل": { single: 1 },
         "إضافة: صوص طحينية": { single: 1 },
@@ -1726,7 +1777,7 @@
     let cart = [];
     let currentCustomizingItem = null;
     let currentCustomizingQty = 1;
-    const branchName = "القوز";
+    const branchName = "حلي";
     const restaurantPhone = BRANCH_DATA.phone;
     const DRINK_NAMES = new Set([
       'كوكاكولا',
@@ -1835,21 +1886,6 @@
       });
     }
 
-    function openChickenFriesItem(itemId, withCheese) {
-      const itemPricing = BRANCH_DATA.prices[itemId];
-      if (!itemPricing || itemPricing.single === undefined || (withCheese && itemPricing.cheese === undefined)) {
-        console.warn('Missing chicken fries pricing:', itemId);
-        return;
-      }
-
-      const presetOptions = { hideCheese: true };
-      if (withCheese) {
-        const cheeseExtra = itemPricing.cheese - itemPricing.single;
-        presetOptions.cheeseChoice = `مع جبن (+${cheeseExtra} ر.ي)`;
-      }
-      openCustomizeModal(itemId, itemPricing.single, null, presetOptions);
-    }
-
     function getOptionExtraPrice(option) {
       const match = option?.match(/\+\s*(\d+(?:\.\d+)?)\s*ر\.ي/);
       return match ? Number(match[1]) : 0;
@@ -1857,9 +1893,19 @@
 
     // دالة مخصصة للأزرار الخارجية التي تختار نوع التحضير مباشرة (مشوي / مقلي)
     function openItemWithPrep(itemId, price, prepChoice) {
-      const itemPricing = BRANCH_DATA.prices[itemId];
-      const branchPrice = itemPricing?.base ?? itemPricing?.single ?? price;
-      openCustomizeModal(itemId, branchPrice, prepChoice, { hideCooking: Boolean(prepChoice) });
+      openCustomizeModal(itemId, price, prepChoice, { hideCooking: Boolean(prepChoice) });
+    }
+
+    function openBurgerTortillaItem(card) {
+      const itemId = card.dataset.itemId;
+      const pricing = BRANCH_DATA.prices[itemId];
+      if (!pricing) return;
+
+      const prepChoice = card.querySelector('.card-prep-choice:checked')?.value;
+      openCustomizeModal(itemId, pricing.base, prepChoice, {
+        hideCheese: true,
+        hideCooking: Boolean(prepChoice)
+      });
     }
 
     function addDirectItemByName(itemId) {
@@ -2106,7 +2152,7 @@
         container.style.display = 'block';
         grid.innerHTML = `
           <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
-          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+3 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+3 ر.ي)</span></label>
+          <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+2 ر.ي)</span></label>
         `;
         return;
       }
@@ -2142,13 +2188,13 @@
       grid.innerHTML = `
         <label class="option-item"><input type="radio" name="opt_cheese" value="بدون جبن" checked onchange="updateCustomModalQtyDisplay()"> بدون جبن</label>
         <label class="option-item"><input type="radio" name="opt_cheese" value="مع جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">مع جبن (+2 ر.ي)</span></label>
-        <label class="option-item"><input type="radio" name="opt_cheese" value="دبل جبن (+4 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">دبل جبن (+4 ر.ي)</span></label>
+        <label class="option-item"><input type="radio" name="opt_cheese" value="دبل جبن (+2 ر.ي)" onchange="updateCustomModalQtyDisplay()"> <span style="color: var(--accent); font-weight: 800;">دبل جبن (+2 ر.ي)</span></label>
       `;
     }
 
     function updateCheeseNoteChipsVisibility(itemName) {
       const cheeseNoteValues = new Set(['مع الجبن', 'بدون جبن']);
-      const shouldHideCheeseNotes = /صحن|باشكا|كلوب زنجر|شاورما|ساندوتش|توست|برجر|تورتيلا|تشيكن فرايز|وجبة زنجر متكاملة/.test(itemName);
+      const shouldHideCheeseNotes = /صحن|باشكا|كلوب زنجر|شاورما|ساندوتش|توست/.test(itemName);
 
       document.querySelectorAll('.note-chip').forEach(chip => {
         const input = chip.querySelector('input');
@@ -2409,14 +2455,16 @@
 
     function toggleDeliveryOptions() {
       const method = document.getElementById('deliverySelect').value;
-            const showExtra = method === 'إضافة على الطلب السابق';
+      const showExtra = method === 'إضافة على الطلب السابق';
       const showLocation = method === 'توصيل';
       const showCar = method === 'استلام سيارة';
       const showStore = method === 'من المحل';
+      const showFestival = method === 'توصيل إلى المهرجان';
 
       document.getElementById('locationField').style.display = showLocation ? 'block' : 'none';
       document.getElementById('carField').style.display = showCar ? 'block' : 'none';
       document.getElementById('storeField').style.display = showStore ? 'block' : 'none';
+      document.getElementById('festivalField').style.display = showFestival ? 'block' : 'none';
 
       if (showExtra) {
         document.getElementById('deliveryExtraFields').style.display = 'none';
@@ -2438,10 +2486,37 @@
       }
     }
 
+    function getDeliveryFee() {
+      if (document.getElementById('deliverySelect').value === 'توصيل إلى المهرجان') return 0;
+      const customerAddress = document.getElementById('customerAddress').value;
+      return /مهرجان\s*حلي/.test(customerAddress) ? 0 : 10;
+    }
+
     function updateCartModalTotal() {
-       let subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+       const itemsSubtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+       let subtotal = itemsSubtotal;
        const method = document.getElementById('deliverySelect').value;
-       if (method === 'توصيل') subtotal += 10;
+       const deliveryOption = document.querySelector('#deliverySelect option[value="توصيل"]');
+       const deliveryFee = getDeliveryFee();
+       if (deliveryOption) {
+         deliveryOption.textContent = deliveryFee === 0
+           ? 'توصيل للموقع (مجاني إلى مهرجان حلي)'
+           : `توصيل للموقع (رسوم ${deliveryFee} ر.ي)`;
+       }
+       const deliveryFeeSummary = document.getElementById('deliveryFeeSummary');
+       const deliveryFeeNote = document.getElementById('deliveryFeeNote');
+       if (method === 'توصيل' || method === 'توصيل إلى المهرجان') {
+         subtotal += deliveryFee;
+         deliveryFeeSummary.style.display = 'block';
+         deliveryFeeSummary.textContent = deliveryFee === 0
+           ? 'التوصيل مجاني إلى مهرجان حلي'
+           : `رسوم التوصيل: ${deliveryFee} ر.ي`;
+         deliveryFeeNote.textContent = deliveryFee === 0
+           ? '🚚 عرض خاص: التوصيل مجاني إلى مهرجان حلي.'
+           : '🚚 رسوم التوصيل ثابتة: 10 ر.ي.';
+       } else {
+         deliveryFeeSummary.style.display = 'none';
+       }
        document.getElementById('cartModalTotal').innerText = subtotal.toFixed(2);
        return subtotal;
     }
@@ -2513,6 +2588,13 @@
       const carDetails = document.getElementById('carDetails').value.trim();
       const storeName = document.getElementById('storeName').value.trim();
       const storePhone = document.getElementById('storePhone').value.trim();
+      const festivalCustomerName = document.getElementById('festivalCustomerName').value.trim();
+      const festivalCustomerPhone = document.getElementById('festivalCustomerPhone').value.trim();
+
+      if (method === 'توصيل إلى المهرجان' && (!festivalCustomerName || !festivalCustomerPhone)) {
+        alert('يرجى كتابة اسم المستلم ورقم الجوال للتوصيل إلى مهرجان حلي.');
+        return;
+      }
       
       let orderText = `السلام عليكم ورحمة الله،\nأرغب في تقديم طلب جديد من مطعم *شاورمايشن* - *فرع ${branchName}*:\n\n`;
       orderText += "------------------------------------\n📋 *تفاصيل الطلبات:*\n";
@@ -2541,8 +2623,16 @@
       } else if(method === 'توصيل') {
           orderText += `👤 *العميل / العنوان:* ${customerAddress ? customerAddress : 'لم يكتب العنوان'}\n`;
           orderText += `📍 *الموقع:* (سيتم إرسال الموقع عبر خرائط جوجل)\n`;
-          orderText += `🛵 رسوم التوصيل: +10 ر.ي\n`;
-          itemsSum += 10;
+          const deliveryFee = getDeliveryFee();
+          orderText += deliveryFee === 0
+            ? '🛵 التوصيل مجاني إلى مهرجان حلي\n'
+            : `🛵 رسوم التوصيل: +${deliveryFee} ر.ي\n`;
+          itemsSum += deliveryFee;
+      } else if(method === 'توصيل إلى المهرجان') {
+          orderText += `👤 *اسم المستلم:* ${festivalCustomerName}\n`;
+          orderText += `📞 *رقم الجوال:* ${festivalCustomerPhone}\n`;
+          orderText += '📍 *وجهة التوصيل:* مهرجان حلي\n';
+          orderText += '🛵 *رسوم التوصيل:* مجاني\n';
       } else if(method === 'استلام سيارة') {
           orderText += `🚗 *بيانات السيارة:* ${carDetails ? carDetails : 'لم يحدد'}\n`;
       } else if(method === 'من المحل') {
@@ -2560,175 +2650,73 @@
     }
 
     // Keep card-level choices visible as consistently sized, stacked buttons.
-    function updateBranchPricingUI() {
-      const rial = '\u0631.\u064a';
-      const navBranchIndicator = document.getElementById('navBranchIndicator');
-      const footerLocationText = document.getElementById('footerLocationText');
-      const footerPhoneLink = document.getElementById('footerPhoneLink');
-      if (navBranchIndicator) navBranchIndicator.textContent = BRANCH_DATA.navLabel;
-      if (footerLocationText) footerLocationText.textContent = BRANCH_DATA.footerLocation;
-      if (footerPhoneLink) {
-        footerPhoneLink.href = `tel:${BRANCH_DATA.displayPhone}`;
-        footerPhoneLink.textContent = `\u{1F4DE} ${BRANCH_DATA.displayPhone}`;
-      }
-
-      document.querySelectorAll('.card[data-item-id]').forEach(card => {
-        const itemId = card.dataset.itemId;
-        const pricing = BRANCH_DATA.prices[itemId];
-        if (!pricing) return;
-
-        const basePrice = pricing.base ?? pricing.single;
-        if (basePrice !== undefined) {
-          const baseDisplay = card.querySelector('.price-display-base, .price-display-single, .price-tag');
-          if (baseDisplay) baseDisplay.textContent = `${basePrice} ${rial}`;
-        }
-        const cheeseDisplay = card.querySelector('.price-display-sub');
-        if (cheeseDisplay && pricing.cheese !== undefined) {
-          cheeseDisplay.textContent = `\u062c\u0628\u0646: ${pricing.cheese} ${rial}`;
-        }
-
-        const singleButton = card.querySelector('.btn-action-single');
-        if (singleButton && basePrice !== undefined && !isDrinkItemName(itemId)) {
-          const text = singleButton.textContent.trim();
-          if (text.includes('\u0623\u0636\u0641')) singleButton.textContent = `+ \u0623\u0636\u0641 (${basePrice} ${rial})`;
-          else if (text.includes('\u0625\u0636\u0627\u0641\u0629')) singleButton.textContent = `+ \u0625\u0636\u0627\u0641\u0629 (${basePrice} ${rial})`;
-        }
-      });
-    }
-
-    function openCardChoiceItem(itemId, prepChoice, cheeseChoice, basePrice, cheesePrice) {
-      const cheeseExtra = cheeseChoice === 'بدون جبن' ? 0 : cheeseChoice === 'مع جبن' ? cheesePrice - basePrice : cheesePrice + 1 - basePrice;
-      const pricedCheeseChoice = cheeseExtra > 0 ? `${cheeseChoice} (+${cheeseExtra} ر.ي)` : cheeseChoice;
-      openCustomizeModal(itemId, basePrice, prepChoice, {
-        cheeseChoice: pricedCheeseChoice,
-        hideCheese: true,
-        hideCooking: Boolean(prepChoice)
-      });
-    }
-
-    function createCardRadioChoice(label, value, price, name, checked, onChange) {
-      const choice = document.createElement('label');
-      choice.className = `card-radio-choice${checked ? ' selected' : ''}`;
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = name;
-      input.value = value;
-      input.checked = checked;
-      input.addEventListener('change', () => {
-        choice.parentElement.querySelectorAll('.card-radio-choice').forEach(item => item.classList.remove('selected'));
-        choice.classList.add('selected');
-        onChange?.();
-      });
-      const choiceLabel = document.createElement('span');
-      choiceLabel.textContent = label;
-      const priceLabel = document.createElement('span');
-      priceLabel.className = 'card-radio-price';
-      priceLabel.textContent = `${price} ر.ي`;
-      choice.append(input, choiceLabel, priceLabel);
-      return choice;
-    }
-
-    function setupCardCustomizationChoices(card, itemPricing) {
-      const itemId = card.dataset.itemId;
-      const footer = card.querySelector('.card-footer');
-      if (!footer) return;
-
-      const basePrice = itemPricing.base ?? itemPricing.single;
-      if (basePrice === undefined) return;
-      if (itemId === 'تشيكن فرايز صغير' || itemId === 'تشيكن فرايز كبير') {
-        footer.replaceChildren();
-        footer.classList.add('card-choices');
-        [
-          ['إضافة', basePrice, false],
-          ['زيادة جبن', itemPricing.cheese, true]
-        ].forEach(([label, price, withCheese]) => {
-          const button = document.createElement('button');
-          button.type = 'button';
-          button.className = 'btn-add choice-chip';
-          button.textContent = `${label} (${price} ر.ي)`;
-          button.addEventListener('click', () => openChickenFriesItem(itemId, withCheese));
-          footer.appendChild(button);
-        });
-        return;
-      }
-      const cheesePrice = basePrice + 1;
-      const cheeseDoublePrice = basePrice + 2;
-      const existingPrepChoices = [...footer.querySelectorAll('.btn-add')]
-        .map(button => (button.getAttribute('onclick') || '').match(/openItemWithPrep\('[^']+',\s*[\d.]+,\s*'([^']+)'\)/))
-        .filter(Boolean)
-        .map(match => match[1]);
-      const prepChoices = [...new Set(existingPrepChoices)];
-      const groupId = `card-choice-${itemId}`;
-      footer.replaceChildren();
-      footer.classList.add('card-choices');
-
-      let selectedPrep = prepChoices[0] || null;
-      let selectedCheese = 'بدون جبن';
-      if (prepChoices.length) {
-        const prepGroup = document.createElement('fieldset');
-        prepGroup.className = 'card-prep-group';
-        const prepTitle = document.createElement('legend');
-        prepTitle.className = 'card-prep-title';
-        prepTitle.textContent = 'طريقة التحضير';
-        const prepOptions = document.createElement('div');
-        prepOptions.className = 'card-prep-options';
-        prepChoices.forEach((prep, index) => {
-          const label = prep.includes('مشوي') ? 'مشوي' : 'مقلي';
-          prepOptions.appendChild(createCardRadioChoice(
-            label,
-            prep,
-            basePrice,
-            `${groupId}-prep`,
-            index === 0,
-            () => { selectedPrep = prep; }
-          ));
-        });
-        prepGroup.append(prepTitle, prepOptions);
-        footer.appendChild(prepGroup);
-      }
-
-      const cheeseGroup = document.createElement('fieldset');
-      cheeseGroup.className = 'card-prep-group card-cheese-options';
-      const cheeseTitle = document.createElement('legend');
-      cheeseTitle.className = 'card-cheese-title';
-      cheeseTitle.textContent = 'اختيار الجبن';
-      cheeseGroup.appendChild(cheeseTitle);
-      [
-        ['بدون جبن', basePrice],
-        ['مع جبن', cheesePrice],
-        ['دبل جبن', cheeseDoublePrice]
-      ].forEach(([label, price], index) => {
-        cheeseGroup.appendChild(createCardRadioChoice(
-          label,
-          label,
-          price,
-          `${groupId}-cheese`,
-          index === 0,
-          () => { selectedCheese = label; }
-        ));
-      });
-      footer.appendChild(cheeseGroup);
-
-      const addButton = document.createElement('button');
-      addButton.type = 'button';
-      addButton.className = 'btn-add choice-chip';
-      addButton.textContent = 'اختيار وإضافة للسلة';
-      addButton.addEventListener('click', () => {
-        openCardChoiceItem(itemId, selectedPrep, selectedCheese, basePrice, cheesePrice);
-      });
-      footer.appendChild(addButton);
-    }
-
     function simplifyExternalActionButtons() {
+      let cardOptionGroupId = 0;
       document.querySelectorAll('.card').forEach(card => {
         const cardItemId = card.getAttribute('data-item-id');
         const itemPricing = BRANCH_DATA.prices[cardItemId];
         const footer = card.querySelector('.card-footer');
-        const isCustomizationCard = Boolean(card.closest('#burgers, #tortilla, #meals'));
-        if (isCustomizationCard && itemPricing) {
-          setupCardCustomizationChoices(card, itemPricing);
+        const isPrepChoiceCard = Boolean(card.closest('#burgers, #tortilla, #meals'));
+        const existingButtons = [...card.querySelectorAll('.btn-add')];
+
+        if (isPrepChoiceCard && itemPricing?.base !== undefined && footer) {
+          const prepChoices = existingButtons
+            .map(button => (button.getAttribute('onclick') || '').match(/openItemWithPrep\('[^']+',\s*[\d.]+,\s*'([^']+)'\)/))
+            .filter(Boolean)
+            .map(match => match[1]);
+          const uniquePrepChoices = [...new Set(prepChoices)];
+          if (!uniquePrepChoices.length) return;
+          const groupId = cardOptionGroupId++;
+
+          footer.replaceChildren();
+          footer.classList.add('card-choices');
+
+          if (uniquePrepChoices.length) {
+            const prepGroup = document.createElement('fieldset');
+            prepGroup.className = 'card-prep-group';
+            const prepTitle = document.createElement('legend');
+            prepTitle.className = 'card-prep-title';
+            prepTitle.textContent = 'نوع التحضير';
+            const prepOptions = document.createElement('div');
+            prepOptions.className = 'card-prep-options';
+
+            uniquePrepChoices.forEach((choice, index) => {
+              const label = document.createElement('label');
+              label.className = 'card-radio-choice';
+              const input = document.createElement('input');
+              input.type = 'radio';
+              input.name = `card-prep-${groupId}`;
+              input.className = 'card-prep-choice';
+              input.value = choice;
+              input.checked = index === 0;
+              if (input.checked) label.classList.add('selected');
+              input.addEventListener('change', () => {
+                prepOptions.querySelectorAll('.card-radio-choice').forEach(option => {
+                  option.classList.toggle('selected', option.contains(input));
+                });
+              });
+              const text = document.createElement('span');
+              text.textContent = choice.includes('مشوي') ? 'مشوي' : 'مقلي';
+              const price = document.createElement('span');
+              price.className = 'card-radio-price';
+              price.textContent = `${itemPricing.base} ر.ي`;
+              label.append(input, text, price);
+              prepOptions.appendChild(label);
+            });
+
+            prepGroup.append(prepTitle, prepOptions);
+            footer.appendChild(prepGroup);
+          }
+
+          const addButton = document.createElement('button');
+          addButton.type = 'button';
+          addButton.className = 'btn-add card-selection-submit';
+          addButton.textContent = 'تخصيص وإضافة للسلة';
+          addButton.addEventListener('click', () => openBurgerTortillaItem(card));
+          footer.appendChild(addButton);
           return;
         }
+
         const hasCheeseChoices = [...card.querySelectorAll('.btn-add')].some(button =>
           (button.getAttribute('onclick') || '').includes('openItemByName') &&
           (button.getAttribute('onclick') || '').includes("'cheese'")
@@ -2780,7 +2768,7 @@
               const prepMatch = action.match(/openItemWithPrep\('[^']+',\s*([\d.]+),\s*'([^']+)'\)/);
               if (prepMatch) {
                 label = prepMatch[2].includes('مشوي') ? 'مشوي' : 'مقلي';
-                price = itemPricing?.base ?? itemPricing?.single ?? Number(prepMatch[1]);
+                price = Number(prepMatch[1]);
               }
             }
 
@@ -2831,9 +2819,9 @@
 
     // إغلاق شاشة البداية تلقائياً
     window.addEventListener('DOMContentLoaded', () => {
-      updateBranchPricingUI();
       simplifyExternalActionButtons();
       setupSectionDock();
+      document.getElementById('customerAddress').addEventListener('input', updateCartModalTotal);
       setTimeout(() => {
         dismissSplashScreen();
       }, 2000);
