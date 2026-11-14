@@ -1272,7 +1272,8 @@
               </div>
               <p class="item-desc">بطاطس مقلية مغطاة بقطع الدجاج والجبنة والصلصات الشهية.</p>
               <div class="card-footer">
-                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز صغير', 'single')">+ إضافة (10)</button>
+                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز صغير', false)">+ إضافة (10 ر.ي)</button>
+                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز صغير', true)">+ زيادة جبن (12 ر.ي)</button>
               </div>
             </div>
           </div>
@@ -1287,7 +1288,8 @@
               </div>
               <p class="item-desc">صحن تشيكن فرايز كبير مشبع بالدجاج المقرمش والجبن الذائب.</p>
               <div class="card-footer">
-                <button class="btn-add btn-action-single" onclick="openItemByName('تشيكن فرايز كبير', 'single')">+ إضافة (15)</button>
+                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز كبير', false)">+ إضافة (15 ر.ي)</button>
+                <button class="btn-add" onclick="openChickenFriesItem('تشيكن فرايز كبير', true)">+ زيادة جبن (17 ر.ي)</button>
               </div>
             </div>
           </div>
@@ -1695,8 +1697,8 @@
         "صحن بطاطس صغير": { base: 3, cheese: 6, labelBase: "3 ر.ي", labelCheese: "6 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
         "صحن بطاطس كبير": { base: 5, cheese: 8, labelBase: "5 ر.ي", labelCheese: "8 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
         "وجبة توست دجاج متكاملة": { base: 14, cheese: 15, labelBase: "14 ر.ي", labelCheese: "15 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
-        "تشيكن فرايز صغير": { single: 10, cheese: 11, labelBase: "10 ر.ي" },
-        "تشيكن فرايز كبير": { single: 15, cheese: 16, labelBase: "15 ر.ي" },
+        "تشيكن فرايز صغير": { single: 10, cheese: 12, labelBase: "10 ر.ي" },
+        "تشيكن فرايز كبير": { single: 15, cheese: 17, labelBase: "15 ر.ي" },
         "وجبة زنجر متكاملة": { single: 15, cheese: 16, labelBase: "15 ر.ي" },
         "وجبة برجر دجاج متكاملة": { base: 15, cheese: 16, labelBase: "15 ر.ي", labelCheese: "16 ر.ي", btnBase: "+ إضافة", btnCheese: "+ إضافة" },
         "إضافة: صوص ثوم": { single: 1 },
@@ -1826,6 +1828,21 @@
         cheeseChoice,
         hideCheese: Boolean(cheeseChoice)
       });
+    }
+
+    function openChickenFriesItem(itemId, withCheese) {
+      const itemPricing = BRANCH_DATA.prices[itemId];
+      if (!itemPricing || itemPricing.single === undefined || (withCheese && itemPricing.cheese === undefined)) {
+        console.warn('Missing chicken fries pricing:', itemId);
+        return;
+      }
+
+      const presetOptions = { hideCheese: true };
+      if (withCheese) {
+        const cheeseExtra = itemPricing.cheese - itemPricing.single;
+        presetOptions.cheeseChoice = `مع جبن (+${cheeseExtra} ر.ي)`;
+      }
+      openCustomizeModal(itemId, itemPricing.single, null, presetOptions);
     }
 
     function getOptionExtraPrice(option) {
@@ -2613,6 +2630,22 @@
 
       const basePrice = itemPricing.base ?? itemPricing.single;
       if (basePrice === undefined) return;
+      if (itemId === 'تشيكن فرايز صغير' || itemId === 'تشيكن فرايز كبير') {
+        footer.replaceChildren();
+        footer.classList.add('card-choices');
+        [
+          ['إضافة', basePrice, false],
+          ['زيادة جبن', itemPricing.cheese, true]
+        ].forEach(([label, price, withCheese]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'btn-add choice-chip';
+          button.textContent = `${label} (${price} ر.ي)`;
+          button.addEventListener('click', () => openChickenFriesItem(itemId, withCheese));
+          footer.appendChild(button);
+        });
+        return;
+      }
       const cheesePrice = basePrice + 1;
       const cheeseDoublePrice = basePrice + 2;
       const existingPrepChoices = [...footer.querySelectorAll('.btn-add')]
@@ -2655,15 +2688,13 @@
       cheeseTitle.className = 'card-cheese-title';
       cheeseTitle.textContent = 'اختيار الجبن';
       cheeseGroup.appendChild(cheeseTitle);
-      const isChickenFries = itemId === 'تشيكن فرايز صغير' || itemId === 'تشيكن فرايز كبير';
       [
         ['بدون جبن', basePrice],
         ['مع جبن', cheesePrice],
         ['دبل جبن', cheeseDoublePrice]
       ].forEach(([label, price], index) => {
-        const displayLabel = isChickenFries && label === 'بدون جبن' ? 'إضافة' : label;
         cheeseGroup.appendChild(createCardRadioChoice(
-          displayLabel,
+          label,
           label,
           price,
           `${groupId}-cheese`,
